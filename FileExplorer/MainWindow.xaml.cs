@@ -9,6 +9,9 @@ using System.Windows.Threading;
 using System.Runtime.Remoting.Messaging;
 using System.Windows.Input;
 using System.Diagnostics;
+using HelixToolkit;
+using HelixToolkit.Wpf;
+using System.Windows.Media.Media3D;
 
 namespace FileExplorer
 {
@@ -17,6 +20,7 @@ namespace FileExplorer
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static MainWindow instace;
         private delegate Node ParseDirDelegate();
 
         //tree display source
@@ -77,13 +81,33 @@ namespace FileExplorer
 
         public static readonly DependencyProperty sizeInBytesProp =
             DependencyProperty.Register("sizeInBytes", typeof(string), typeof(MainWindow), new PropertyMetadata((string)""));
-
+        private  string MODELPATH = Node.selectedBytes ;
         public MainWindow()
         {
             InitializeComponent();
             //load up last file used
             LoadPathFile();
-            DataContext = this;           
+            DataContext = this;
+            instace = this;
+        
+            ModelVisual3D device3d = new ModelVisual3D();
+           // device3d.Content = Display3d()
+        }
+        public void path3d(String MODEL_PATH) {
+            Model3D device = null;
+            if (MODEL_PATH  == ".stl") {
+                try
+                {
+                    //viewPort3d.RotateGesture = new MouseGesture(MouseAction.LeftClick);
+                    ModelImporter import = new ModelImporter();
+                    device = import.Load(MODEL_PATH);
+                }
+                catch (Exception e)
+                {
+                    System.Windows.MessageBox.Show("Exception Error : " + e.StackTrace);
+                }
+
+            }
         }
 
         public void LoadPathFile()
@@ -151,23 +175,29 @@ namespace FileExplorer
 
         public void viewTree_PreviewMouseRightClickDown(object sender, MouseButtonEventArgs e)
         {
-            string filePath = parseDir;
-            Debug.WriteLine("NODE PATH SELECT : " + Node.selectedBytes);
-            Debug.WriteLine("FILE PATH SELECTED : " + filePath);
-            Debug.WriteLine("DirDisplay : " + dirDisplay);
-            System.Diagnostics.Process.Start("explorer.exe", Node.selectedBytes);
-
+            if (Node.selectedBytes is null)
+            {
+                System.Windows.MessageBox.Show("Por favor selecciona un documento", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                if (Path.GetExtension(Node.selectedBytes).Equals(".stl", StringComparison.OrdinalIgnoreCase))
+                {
+                    Window3D win = new Window3D();
+                    win.Display3d(Node.selectedBytes);
+                    win.Show();
+                }
+                else
+                {
+                    Debug.WriteLine("NODE PATH SELECT : " + Node.selectedBytes);
+                    System.Diagnostics.Process.Start("explorer.exe", Node.selectedBytes);
+                }
+            }
+            
         }
         public void viewTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            /*TreeViewItem selectNode = (TreeViewItem)fileDisplay.SelectedItem;
-            if (selectNode != null)
-            {
-                string header = selectNode.Header.ToString();
-                Debug.WriteLine("HEADER SELECTED : " + header);
-                string tag = selectNode.Tag.ToString();
-                Debug.WriteLine("TAG SELECTED : " +  tag);
-            }*/
+
         }
 
         private void ParseNewDir()
@@ -237,6 +267,12 @@ namespace FileExplorer
             {
                 System.Windows.MessageBox.Show("There has been an error saving the current directory.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            string pathF = Node.selectedBytes;
+            Debug.WriteLine("NODE CLICKED CONTEXT MENU :" + pathF);
         }
     }
 }

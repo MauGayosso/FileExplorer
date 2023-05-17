@@ -1,0 +1,28 @@
+﻿<Window x:Class="FileExplorer.WindowLogin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FileExplorer"
+        mc:Ignorable="d"
+        Height="450" Width="800">
+    <Grid Background="#FF0036A0" ShowGridLines="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="107*"/>
+            <ColumnDefinition Width="11*"/>
+            <ColumnDefinition Width="7*"/>
+            <ColumnDefinition Width="675*"/>
+        </Grid.ColumnDefinitions>
+        <Canvas HorizontalAlignment="Left" Height="386" VerticalAlignment="Center" Width="372" Background="White" Grid.Column="3" Margin="89,0,0,0">
+            <Image x:Name="imageLogo" Height="108" Width="150" HorizontalAlignment="Left" Canvas.Left="117" Canvas.Top="23" VerticalAlignment="Top" RenderTransformOrigin="0.507,0.482" Source="/logo1.png"/>
+        </Canvas>
+        <Canvas Margin="165,188,290,79" Background="#FFE6E6E6" Grid.Column="3">
+            <TextBox x:Name="txtUsuario" TextWrapping="Wrap" Canvas.Top="43" Width="120" TextChanged="txtUsuario_TextChanged" HorizontalAlignment="Left" Canvas.Left="50" VerticalAlignment="Top"/>
+            <Label Content="Usuario" Canvas.Left="50" Canvas.Top="17" Width="53" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <Label Content="Contraseña" Canvas.Left="50" Canvas.Top="71"/>
+            <PasswordBox x:Name="passwordBox" Canvas.Left="50" Canvas.Top="102" Width="120"/>
+        </Canvas>
+        <Button x:Name="btnEntrar" Content="Entrar" HorizontalAlignment="Left" Margin="252,324,0,0" VerticalAlignment="Top" Click="Button_Click" Background="White" Width="46" RenderTransformOrigin="0.471,0.67" Grid.Column="3"/>
+
+    </Grid>
+</Window>

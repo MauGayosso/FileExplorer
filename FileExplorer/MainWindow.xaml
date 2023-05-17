@@ -45,8 +45,12 @@
                     <Image Style="{StaticResource statusIcon}" Source="loading.png" VerticalAlignment="Top"/>
                     <Label Style="{StaticResource statusMsg}" Content="{x:Static prop:Resources.parsingDirectory}" />
                 </StackPanel>
-
                 <TreeView x:Name="fileDisplay" Grid.RowSpan="5" PreviewMouseRightButtonDown="viewTree_PreviewMouseRightClickDown" SelectedItemChanged="viewTree_SelectedItemChanged">
+                    <TreeView.Resources>
+                        <ContextMenu x:Key="TreeViewContextMenu" x:Name="TreeViewContextMenu">
+                            <MenuItem Header="Open" Click="MenuItem_Click"></MenuItem>
+                        </ContextMenu>
+                    </TreeView.Resources>
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate DataType="{x:Type local:Node}" ItemsSource="{Binding children}">
                             <StackPanel Orientation="Horizontal" >
@@ -57,10 +61,8 @@
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
                 </TreeView>
-
-
+                
                 <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Grid.RowSpan="5"/>
-
                 <Label Grid.Column="2" Grid.Row="0" Content="{x:Static prop:Resources.folders}" Style="{StaticResource lbl}"/>
                 <Label Grid.Column="3" Grid.Row="0" Style="{StaticResource resultLbl}"
                    Content="{Binding folders}"/>
