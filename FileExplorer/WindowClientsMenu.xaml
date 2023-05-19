@@ -1,0 +1,25 @@
+﻿<Window x:Class="FileExplorer.WindowClientsMenu"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FileExplorer"
+        mc:Ignorable="d"
+        Title="WindowClientsMenu" Height="450" Width="800">
+    <Grid>
+        <Canvas Background="#FFE4E4E4" Margin="151,76,151,76">
+            <ComboBox x:Name="comboBox1" Canvas.Left="165" Canvas.Top="141" Width="168" SelectionChanged="comboBox1_SelectionChanged" Height="28">
+                <ComboBox.Background>
+                    <LinearGradientBrush EndPoint="0,1">
+                        <GradientStop Color="#FFF0F0F0"/>
+                        <GradientStop Color="White" Offset="1"/>
+                    </LinearGradientBrush>
+                </ComboBox.Background>
+                <ComboBoxItem Tag="Cliente 1">Cliente 1</ComboBoxItem>
+                <ComboBoxItem Tag="Cliente 2">Cliente 2</ComboBoxItem>
+            </ComboBox>
+            <Button x:Name="btnEntrar" Content="Entrar" Canvas.Left="218" Canvas.Top="208" HorizontalAlignment="Left" VerticalAlignment="Top" Width="62" Click="btnEntrar_Click"/>
+        </Canvas>
+
+    </Grid>
+</Window>

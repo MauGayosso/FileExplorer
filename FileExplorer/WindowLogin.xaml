@@ -20,9 +20,10 @@
             <TextBox x:Name="txtUsuario" TextWrapping="Wrap" Canvas.Top="43" Width="120" TextChanged="txtUsuario_TextChanged" HorizontalAlignment="Left" Canvas.Left="50" VerticalAlignment="Top"/>
             <Label Content="Usuario" Canvas.Left="50" Canvas.Top="17" Width="53" HorizontalAlignment="Left" VerticalAlignment="Top"/>
             <Label Content="Contraseña" Canvas.Left="50" Canvas.Top="71"/>
-            <PasswordBox x:Name="passwordBox" Canvas.Left="50" Canvas.Top="102" Width="120"/>
+            <PasswordBox x:Name="txtPassword" Canvas.Left="50" Canvas.Top="97" Width="120" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         </Canvas>
         <Button x:Name="btnEntrar" Content="Entrar" HorizontalAlignment="Left" Margin="252,324,0,0" VerticalAlignment="Top" Click="Button_Click" Background="White" Width="46" RenderTransformOrigin="0.471,0.67" Grid.Column="3"/>
+        <Button x:Name="btnVisitante" Grid.Column="3" Content="Visitante" HorizontalAlignment="Left" Margin="238,372,0,0" VerticalAlignment="Top" Width="74" Click="btnVisitante_Click"/>
 
     </Grid>
 </Window>
