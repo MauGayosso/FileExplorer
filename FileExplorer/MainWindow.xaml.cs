@@ -12,6 +12,11 @@ using System.Diagnostics;
 using HelixToolkit;
 using HelixToolkit.Wpf;
 using System.Windows.Media.Media3D;
+using System.Net;
+using System.Net.Mail;
+using MessageBox = System.Windows.MessageBox;
+using Outlook = Microsoft.Office.Interop.Outlook;
+using System.Windows.Media;
 
 namespace FileExplorer
 {
@@ -274,5 +279,51 @@ namespace FileExplorer
             string pathF = Node.selectedBytes;
             Debug.WriteLine("NODE CLICKED CONTEXT MENU :" + pathF);
         }
+
+        private void SendConfirmation()
+        {
+            Outlook.Application outlookApp = new Outlook.Application();
+            Outlook.MailItem mailItem = (Outlook.MailItem)outlookApp.CreateItem(Outlook.OlItemType.olMailItem);
+
+            mailItem.Subject = "Hello from test mail";
+            mailItem.Body = "Example of mail";
+            mailItem.To = "maugayosso1405@gmail.com";
+
+            mailItem.Send();
+
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(mailItem);
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(outlookApp);
+        }
+
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            SendConfirmation();
+        }
+
+        private void SearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            string searchItem = txtSearch.Text;
+            Debug.WriteLine("SEARCH TEXT : " + searchItem);
+            foreach(TreeViewItem n in fileDisplay.Items){
+                SearchItemTreeView(n, searchItem);
+            }
+
+
+        }
+
+        private void SearchItemTreeView(TreeViewItem item, string searchItem)
+        {
+            if (item. == searchItem)
+            {
+                item.IsExpanded = true;
+                item.IsSelected = true;
+                return;
+            }
+            foreach (TreeViewItem i in item.Items)
+            {
+                SearchItemTreeView(i, searchItem);
+            }
+        }          
     }
 }
