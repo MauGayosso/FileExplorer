@@ -17,6 +17,12 @@ using System.Net.Mail;
 using MessageBox = System.Windows.MessageBox;
 using Outlook = Microsoft.Office.Interop.Outlook;
 using System.Windows.Media;
+using CheckBox = System.Windows.Controls.CheckBox;
+using Assimp;
+using Assimp.Configs;
+using Microsoft.Extensions.Options;
+using Assimp.Unmanaged;
+using Microsoft.Scripting.Hosting;
 
 namespace FileExplorer
 {
@@ -192,6 +198,29 @@ namespace FileExplorer
                     win.Display3d(Node.selectedBytes);
                     win.Show();
                 }
+                else if (Path.GetExtension(Node.selectedBytes).Equals(".step", StringComparison.OrdinalIgnoreCase)) {
+                    var stepPath = Node.selectedBytes;
+                    WindowSTEP win = new WindowSTEP();
+                    win.LoadStepFile(stepPath);
+                    win.Show();
+                    //var stlPath = "C:/Users/mauri/OneDrive/Escritorio/"+Path.GetFileName(Node.selectedBytes)+".stl";
+                    var stlPath = "C:/Users/mauri/OneDrive/Escritorio/";
+
+                    /*ScriptEngine engine = Python.CreateEngine();
+                    dynamic script = engine.ExecuteFile("");
+
+                    dynamic meshLabServer = script.MeshLabServer();
+
+                    dynamic scriptText = script.Format(@"mls = 
+                        meshlabserver.MeshLabServer()
+                        msl.loadNew()
+                        msl.open('{0}')
+                        msl.saveCurrentMesh('{1}')
+                        msl.close()",stepPath,stlPath);
+                    engine.Execute(scriptText,meshLabServer);*/
+
+                    
+                }
                 else
                 {
                     Debug.WriteLine("NODE PATH SELECT : " + Node.selectedBytes);
@@ -231,10 +260,10 @@ namespace FileExplorer
             this.Dispatcher.Invoke(DispatcherPriority.Background, ((Action)(() => {
                 parseMsg.Visibility = Visibility.Hidden;
                 firstNode = node;
-                firstNode.isChecked = false;
+                //firstNode.isChecked = false;
                 UpdateCounts();
                 fileDisplay.ItemsSource = treeCtx;
-                System.Windows.MessageBox.Show(Properties.Resources.parseSuccess);
+                //System.Windows.MessageBox.Show(Properties.Resources.parseSuccess);
             })));
         }
 
@@ -248,6 +277,7 @@ namespace FileExplorer
         private void chk_clicked(object sender, RoutedEventArgs e)
         {
             UpdateCounts();
+           
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -305,24 +335,23 @@ namespace FileExplorer
         {
             string searchItem = txtSearch.Text;
             Debug.WriteLine("SEARCH TEXT : " + searchItem);
-            foreach(TreeViewItem n in fileDisplay.Items){
-                SearchItemTreeView(n, searchItem);
-            }
+            SearchItemTreeView(fileDisplay.Items, searchItem);
+            
 
 
         }
 
-        private void SearchItemTreeView(TreeViewItem item, string searchItem)
+        private void SearchItemTreeView(ItemCollection nodes, string searchItem)
         {
-            if (item. == searchItem)
+            foreach (var node in nodes)
             {
-                item.IsExpanded = true;
-                item.IsSelected = true;
-                return;
-            }
-            foreach (TreeViewItem i in item.Items)
-            {
-                SearchItemTreeView(i, searchItem);
+                Node item = (Node)node;
+                bool isMatCh = item.name.ToString().ToLower().Contains(searchItem);
+                if (isMatCh)
+                {
+
+                }
+               // SearchItemTreeView(item, searchItem);
             }
         }          
     }

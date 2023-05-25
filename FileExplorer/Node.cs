@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace FileExplorer
@@ -63,7 +64,9 @@ namespace FileExplorer
                     //store previous value
                     prevVal = _isChecked;
                     _isChecked = value;
-                    UpdateCheckState();
+                    //UpdateCheckState();
+                    updateCounts();
+                    UpdateChildrenCheckState();
                     //notify prop changed
                     OnPropertyChanged("IsChecked");
                     //reset entrancy for next recursive call
@@ -74,47 +77,12 @@ namespace FileExplorer
 
         private void updateCounts()
         {
-            if (selectedBytes == "")
-            {
-                selectedBytes = nodeVal;
-                
-            }
-            else if (selectedBytes != "")
-            {
-                selectedBytes = nodeVal;
-            }
+            selectedBytes = nodeVal;
+            Debug.WriteLine("Selected : " + selectedBytes);
 
-            //decide operation ie. increase or decrease
-            string op = "";
-            if(prevVal != null) //if prev vall is null do nothing
-            {
-                if (isChecked == true) //increase
-                    op = "+";
-                else if (isChecked == false || (isChecked == null && prevVal == true)) //decrease
-                    op = "-";
-            }
-                
-            if (op == "+")
-            {
-                //increase file or folder count
-                if (isFile)
-                    ++selectedFiles;
-                else
-                    ++selectedFolders;
-                //increase byte count (folders are 0)
-            }
-            else if (op == "-")
-            {
-                //decrease file or folder count
-                if (isFile)
-                    --selectedFiles;
-                else
-                    --selectedFolders;
-                //decrease byte count (folders are 0)
-            }
         }
 
-        private void UpdateCheckState()
+       /* private void UpdateCheckState()
         {
             updateCounts();
 
@@ -127,7 +95,7 @@ namespace FileExplorer
                 bool? parentIsChecked = parent.DetermineCheckState();
                 parent.isChecked = parentIsChecked;
             }
-        }
+        }*/
 
         private void UpdateChildrenCheckState()
         {
@@ -159,7 +127,7 @@ namespace FileExplorer
             folders = 0;
             selectedFiles = 0;
             selectedFolders = 0;
-            selectedBytes = "";
+            selectedBytes = null;
         }
 
         //recurively parse a Node which contains the directory at hand
@@ -170,7 +138,7 @@ namespace FileExplorer
                 //add each child directory to children, increase folder count
                 foreach (string d in Directory.GetDirectories(this.fullPath))
                 {
-                    Debug.WriteLine("PATH FOLDERS:  " + d);
+                   //Debug.WriteLine("PATH FOLDERS:  " + d);
                     DirectoryInfo dirInfo = new DirectoryInfo(d);
                     Node curDNode = new Node()
                     {
@@ -204,7 +172,7 @@ namespace FileExplorer
                         isFile = true,
                         nodeVal = fileInfo.FullName
                     };
-                    Debug.WriteLine("PATH FILES : "+fileInfo.FullName);
+                   // Debug.WriteLine("PATH FILES : "+fileInfo.FullName);
                     this.children.Add(curFNode);
                     ++files;
                 }
@@ -223,6 +191,8 @@ namespace FileExplorer
             if (this.PropertyChanged != null)
                 this.PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
+
+
 
         public event PropertyChangedEventHandler PropertyChanged;
     }
