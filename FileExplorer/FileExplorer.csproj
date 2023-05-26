@@ -372,6 +372,27 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="menu_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="menu_ico.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="exit_icon.png" />
+    <Resource Include="eye_ico.png" />
+    <Resource Include="lupa_icon.png" />
+    <Resource Include="mail_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="folder_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="user_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="refresh.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

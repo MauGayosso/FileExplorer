@@ -23,6 +23,9 @@ using Assimp.Configs;
 using Microsoft.Extensions.Options;
 using Assimp.Unmanaged;
 using Microsoft.Scripting.Hosting;
+using Vector3D = System.Windows.Media.Media3D.Vector3D;
+using System.Runtime.CompilerServices;
+using Material = System.Windows.Media.Media3D.Material;
 
 namespace FileExplorer
 {
@@ -31,6 +34,7 @@ namespace FileExplorer
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static System.Windows.Media.Color WindowGlassColor { get; }
         public static MainWindow instace;
         private delegate Node ParseDirDelegate();
 
@@ -92,7 +96,7 @@ namespace FileExplorer
 
         public static readonly DependencyProperty sizeInBytesProp =
             DependencyProperty.Register("sizeInBytes", typeof(string), typeof(MainWindow), new PropertyMetadata((string)""));
-        private  string MODELPATH = Node.selectedBytes ;
+        private string MODELPATH = Node.selectedBytes;
         public MainWindow()
         {
             InitializeComponent();
@@ -100,13 +104,17 @@ namespace FileExplorer
             LoadPathFile();
             DataContext = this;
             instace = this;
-        
+
             ModelVisual3D device3d = new ModelVisual3D();
-           // device3d.Content = Display3d()
+            // device3d.Content = Display3d()
+            Brush titleBarBrush = new SolidColorBrush(WindowGlassColor);
+
         }
-        public void path3d(String MODEL_PATH) {
+        public void path3d(String MODEL_PATH)
+        {
             Model3D device = null;
-            if (MODEL_PATH  == ".stl") {
+            if (MODEL_PATH == ".stl")
+            {
                 try
                 {
                     //viewPort3d.RotateGesture = new MouseGesture(MouseAction.LeftClick);
@@ -132,7 +140,7 @@ namespace FileExplorer
                         parseDir = inputFile.ReadLine();
                     }
                 }
-                catch(Exception err)
+                catch (Exception err)
                 {
                     System.Windows.MessageBox.Show("There has been an error loading the previously parsed directory.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
@@ -140,7 +148,7 @@ namespace FileExplorer
             {
                 //Get full path of current directory
                 parseDir = Path.GetFullPath(".");
-            }               
+            }
         }
 
         private void createFirstNode()
@@ -161,7 +169,7 @@ namespace FileExplorer
             treeCtx = new ObservableCollection<Node>()
             {
                 firstNode
-            };         
+            };
         }
 
         //update all dependacy properties to current static values in Node class
@@ -181,14 +189,14 @@ namespace FileExplorer
             if (_NewPath != null && !string.IsNullOrWhiteSpace(_NewPath.FullName))
             {
                 Debug.WriteLine("NEW PATH : " + _NewPath.FullName);
-            } 
+            }
         }
 
         public void viewTree_PreviewMouseRightClickDown(object sender, MouseButtonEventArgs e)
         {
             if (Node.selectedBytes is null)
             {
-                System.Windows.MessageBox.Show("Por favor selecciona un documento", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show("Selecciona un archivo", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
@@ -198,7 +206,8 @@ namespace FileExplorer
                     win.Display3d(Node.selectedBytes);
                     win.Show();
                 }
-                else if (Path.GetExtension(Node.selectedBytes).Equals(".step", StringComparison.OrdinalIgnoreCase)) {
+                else if (Path.GetExtension(Node.selectedBytes).Equals(".step", StringComparison.OrdinalIgnoreCase))
+                {
                     var stepPath = Node.selectedBytes;
                     WindowSTEP win = new WindowSTEP();
                     win.LoadStepFile(stepPath);
@@ -219,7 +228,7 @@ namespace FileExplorer
                         msl.close()",stepPath,stlPath);
                     engine.Execute(scriptText,meshLabServer);*/
 
-                    
+
                 }
                 else
                 {
@@ -227,7 +236,7 @@ namespace FileExplorer
                     System.Diagnostics.Process.Start("explorer.exe", Node.selectedBytes);
                 }
             }
-            
+
         }
         public void viewTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
@@ -257,7 +266,8 @@ namespace FileExplorer
             Node node = parseDelegate.EndInvoke(theResults);
             //Back to the GUI thread to update tree display and counts with newly parsed directory
             //hide parsing msg and display complete msg
-            this.Dispatcher.Invoke(DispatcherPriority.Background, ((Action)(() => {
+            this.Dispatcher.Invoke(DispatcherPriority.Background, ((Action)(() =>
+            {
                 parseMsg.Visibility = Visibility.Hidden;
                 firstNode = node;
                 //firstNode.isChecked = false;
@@ -277,7 +287,7 @@ namespace FileExplorer
         private void chk_clicked(object sender, RoutedEventArgs e)
         {
             UpdateCounts();
-           
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -298,7 +308,7 @@ namespace FileExplorer
             {
                 System.IO.File.WriteAllText(@"path.txt", parseDir);
             }
-            catch(Exception err)
+            catch (Exception err)
             {
                 System.Windows.MessageBox.Show("There has been an error saving the current directory.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -336,9 +346,6 @@ namespace FileExplorer
             string searchItem = txtSearch.Text;
             Debug.WriteLine("SEARCH TEXT : " + searchItem);
             SearchItemTreeView(fileDisplay.Items, searchItem);
-            
-
-
         }
 
         private void SearchItemTreeView(ItemCollection nodes, string searchItem)
@@ -351,8 +358,86 @@ namespace FileExplorer
                 {
 
                 }
-               // SearchItemTreeView(item, searchItem);
+                // SearchItemTreeView(item, searchItem);
             }
-        }          
+        }
+        private void HamburgerButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (MenuItemsPanel.Visibility == Visibility.Visible)
+            {
+                MenuItemsPanel.Visibility = Visibility.Hidden;
+            }
+            else if (MenuItemsPanel.Visibility == Visibility.Hidden)
+            {
+                MenuItemsPanel.Visibility = Visibility.Visible;
+            }
+
+        }
+
+        private void MenuClick(object sender, RoutedEventArgs e)
+        {
+            WindowClientsMenu win = new WindowClientsMenu();
+            win.Show();
+            Close();
+        }
+
+        private void ExitClick(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void LogOut(object sender, RoutedEventArgs e)
+        {
+            WindowLogin win = new WindowLogin();
+            win.Show();
+            Close();
+        }
+
+        private void Open_Click(object sender, RoutedEventArgs e)
+        {
+            grid3d = null;
+            try
+            {
+                Model3D device = null;
+                Material material = new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(91, 91, 92)));
+                ModelVisual3D device3d = new ModelVisual3D();
+                viewPort3d.RotateGesture = new MouseGesture(MouseAction.LeftClick);
+                ModelImporter import = new ModelImporter();
+                viewPort3d.Children.Remove(device3d);
+                import.DefaultMaterial = material;
+                device = import.Load(Node.selectedBytes);
+                device3d.Content = device;
+                viewPort3d.Children.Add(device3d);
+                //viewPort3d.Children.Add(new ModelVisual3D(){ Content = new AmbientLight(Colors.White)});
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar modelo STL:" + ex.StackTrace, "Error", MessageBoxButton.OK);
+            }
+
+        }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void folder_click(object sender, RoutedEventArgs e)
+        {
+            if (Node.selectedBytes == null)
+            {
+                System.Windows.MessageBox.Show("Selecciona un archivo", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                Process.Start("explorer.exe", Path.GetDirectoryName(Node.selectedBytes));
+            }
+        }
+
+        private void reloadTreeView_click(object sender, RoutedEventArgs e)
+        {
+            LoadPathFile();
+            ParseNewDir();
+        }
     }
 }

@@ -43,18 +43,19 @@ namespace FileExplorer
         public bool isFile { get; set; }
         private bool? prevVal { get; set; }
         //stores whether current node has been entered already during current recursive call
-        private bool reentrancyCheck = false;  
+        private bool reentrancyCheck = false;
 
         //binding for checkbox of current node
-        private bool? _isChecked { get; set; }  
-        public bool? isChecked {
+        private bool? _isChecked { get; set; }
+        public bool? isChecked
+        {
             get
             {
                 return _isChecked;
             }
             set
             {
-                if(isChecked != value)
+                if (isChecked != value)
                 {
                     //if node has been etnered already than exit
                     if (reentrancyCheck)
@@ -70,7 +71,7 @@ namespace FileExplorer
                     //notify prop changed
                     OnPropertyChanged("IsChecked");
                     //reset entrancy for next recursive call
-                    reentrancyCheck = false;                   
+                    reentrancyCheck = false;
                 }
             }
         }
@@ -79,23 +80,22 @@ namespace FileExplorer
         {
             selectedBytes = nodeVal;
             Debug.WriteLine("Selected : " + selectedBytes);
-
         }
 
-       /* private void UpdateCheckState()
-        {
-            updateCounts();
+        /* private void UpdateCheckState()
+         {
+             updateCounts();
 
-            //update children
-            if (children.Count != 0)
-                UpdateChildrenCheckState();
-            //update parent
-            if(parent != null)
-            {
-                bool? parentIsChecked = parent.DetermineCheckState();
-                parent.isChecked = parentIsChecked;
-            }
-        }*/
+             //update children
+             if (children.Count != 0)
+                 UpdateChildrenCheckState();
+             //update parent
+             if(parent != null)
+             {
+                 bool? parentIsChecked = parent.DetermineCheckState();
+                 parent.isChecked = parentIsChecked;
+             }
+         }*/
 
         private void UpdateChildrenCheckState()
         {
@@ -138,7 +138,7 @@ namespace FileExplorer
                 //add each child directory to children, increase folder count
                 foreach (string d in Directory.GetDirectories(this.fullPath))
                 {
-                   //Debug.WriteLine("PATH FOLDERS:  " + d);
+                    //Debug.WriteLine("PATH FOLDERS:  " + d);
                     DirectoryInfo dirInfo = new DirectoryInfo(d);
                     Node curDNode = new Node()
                     {
@@ -149,7 +149,7 @@ namespace FileExplorer
                         iconLoc = folderIcon,
                         isFile = false,
                         nodeVal = dirInfo.FullName
-                        
+
                     };
 
                     this.children.Add(curDNode);
@@ -172,14 +172,14 @@ namespace FileExplorer
                         isFile = true,
                         nodeVal = fileInfo.FullName
                     };
-                   // Debug.WriteLine("PATH FILES : "+fileInfo.FullName);
+                    // Debug.WriteLine("PATH FILES : "+fileInfo.FullName);
                     this.children.Add(curFNode);
                     ++files;
                 }
 
                 return this;
             }
-            catch(Exception err)
+            catch (Exception err)
             {
                 System.Windows.MessageBox.Show("There has been an error parsing the selected directory.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -191,9 +191,6 @@ namespace FileExplorer
             if (this.PropertyChanged != null)
                 this.PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
-
-
-
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }
