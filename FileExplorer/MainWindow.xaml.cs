@@ -26,6 +26,20 @@ using Microsoft.Scripting.Hosting;
 using Vector3D = System.Windows.Media.Media3D.Vector3D;
 using System.Runtime.CompilerServices;
 using Material = System.Windows.Media.Media3D.Material;
+using Microsoft.Web.WebView2.Core;
+using Excel = Microsoft.Office.Interop.Excel;
+using System.Windows.Forms.Integration;
+using OxyPlot;
+using OxyPlot.Series;
+using OxyPlot.Axes;
+using System.Collections.Generic;
+using TreeView = System.Windows.Controls.TreeView;
+using Eto;
+using System.Windows.Controls.Primitives;
+using System.Xml.Linq;
+using Windows.Devices.WiFiDirect;
+//using SkiaSharp;
+//using SkiaSharp.Views.WPF;
 
 namespace FileExplorer
 {
@@ -194,54 +208,20 @@ namespace FileExplorer
 
         public void viewTree_PreviewMouseRightClickDown(object sender, MouseButtonEventArgs e)
         {
-            if (Node.selectedBytes is null)
-            {
-                System.Windows.MessageBox.Show("Selecciona un archivo", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            else
-            {
-                if (Path.GetExtension(Node.selectedBytes).Equals(".stl", StringComparison.OrdinalIgnoreCase))
-                {
-                    Window3D win = new Window3D();
-                    win.Display3d(Node.selectedBytes);
-                    win.Show();
-                }
-                else if (Path.GetExtension(Node.selectedBytes).Equals(".step", StringComparison.OrdinalIgnoreCase))
-                {
-                    var stepPath = Node.selectedBytes;
-                    WindowSTEP win = new WindowSTEP();
-                    win.LoadStepFile(stepPath);
-                    win.Show();
-                    //var stlPath = "C:/Users/mauri/OneDrive/Escritorio/"+Path.GetFileName(Node.selectedBytes)+".stl";
-                    var stlPath = "C:/Users/mauri/OneDrive/Escritorio/";
-
-                    /*ScriptEngine engine = Python.CreateEngine();
-                    dynamic script = engine.ExecuteFile("");
-
-                    dynamic meshLabServer = script.MeshLabServer();
-
-                    dynamic scriptText = script.Format(@"mls = 
-                        meshlabserver.MeshLabServer()
-                        msl.loadNew()
-                        msl.open('{0}')
-                        msl.saveCurrentMesh('{1}')
-                        msl.close()",stepPath,stlPath);
-                    engine.Execute(scriptText,meshLabServer);*/
-
-
-                }
-                else
-                {
-                    Debug.WriteLine("NODE PATH SELECT : " + Node.selectedBytes);
-                    System.Diagnostics.Process.Start("explorer.exe", Node.selectedBytes);
-                }
-            }
-
+            var carpetaOnly = Path.GetDirectoryName(Node.selectedBytes);
+            Debug.WriteLine("1: " + carpetaOnly);
+            parseDir = carpetaOnly;
+            //LoadPathFile();
+            ParseNewDir();
+            // createFirstNode();
         }
+
+
         public void viewTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-
         }
+
+
 
         private void ParseNewDir()
         {
@@ -273,17 +253,14 @@ namespace FileExplorer
                 //firstNode.isChecked = false;
                 UpdateCounts();
                 fileDisplay.ItemsSource = treeCtx;
-                //System.Windows.MessageBox.Show(Properties.Resources.parseSuccess);
             })));
         }
 
-        //directory changed -> parse the new directory
         private void dirDisplay_TextChanged(object sender, TextChangedEventArgs e)
         {
             ParseNewDir();
         }
 
-        //checkbox clicked update counts display
         private void chk_clicked(object sender, RoutedEventArgs e)
         {
             UpdateCounts();
@@ -303,7 +280,6 @@ namespace FileExplorer
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            //save current directory to text file on window close
             try
             {
                 System.IO.File.WriteAllText(@"path.txt", parseDir);
@@ -317,7 +293,7 @@ namespace FileExplorer
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             string pathF = Node.selectedBytes;
-            Debug.WriteLine("NODE CLICKED CONTEXT MENU :" + pathF);
+
         }
 
         private void SendConfirmation()
@@ -343,22 +319,25 @@ namespace FileExplorer
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
+            twSearched.Items.Clear();
             string searchItem = txtSearch.Text;
-            Debug.WriteLine("SEARCH TEXT : " + searchItem);
-            SearchItemTreeView(fileDisplay.Items, searchItem);
+            SearchItemTreeView(searchItem);
         }
 
-        private void SearchItemTreeView(ItemCollection nodes, string searchItem)
+        private void SearchItemTreeView(string searchItem)
         {
-            foreach (var node in nodes)
+            string[] files = Directory.GetFiles("C:/Users/mauri/Documents/ING/", searchItem, SearchOption.AllDirectories);
+            if (files.Length > 0)
             {
-                Node item = (Node)node;
-                bool isMatCh = item.name.ToString().ToLower().Contains(searchItem);
-                if (isMatCh)
+                // return files[0]
+                foreach (string file in files)
                 {
-
+                    twSearched.Items.Add(file);
                 }
-                // SearchItemTreeView(item, searchItem);
+            }
+            else
+            {
+
             }
         }
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
@@ -395,27 +374,63 @@ namespace FileExplorer
 
         private void Open_Click(object sender, RoutedEventArgs e)
         {
-            grid3d = null;
-            try
+            if (Node.selectedBytes == null)
             {
-                Model3D device = null;
-                Material material = new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(91, 91, 92)));
-                ModelVisual3D device3d = new ModelVisual3D();
-                viewPort3d.RotateGesture = new MouseGesture(MouseAction.LeftClick);
-                ModelImporter import = new ModelImporter();
-                viewPort3d.Children.Remove(device3d);
-                import.DefaultMaterial = material;
-                device = import.Load(Node.selectedBytes);
-                device3d.Content = device;
-                viewPort3d.Children.Add(device3d);
-                //viewPort3d.Children.Add(new ModelVisual3D(){ Content = new AmbientLight(Colors.White)});
+                System.Windows.MessageBox.Show("Selecciona un archivo", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show("Error al cargar modelo STL:" + ex.StackTrace, "Error", MessageBoxButton.OK);
-            }
+                if (Path.GetExtension(Node.selectedBytes).Equals(".stl", StringComparison.OrdinalIgnoreCase))
+                {
+                    try
+                    {
+                        Model3D device = null;
+                        Material material = new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(91, 91, 92)));
+                        ModelVisual3D device3d = new ModelVisual3D();
+                        viewPort3d.RotateGesture = new MouseGesture(MouseAction.LeftClick);
+                        ModelImporter import = new ModelImporter();
+                        viewPort3d.Children.Remove(device3d);
+                        import.DefaultMaterial = material;
+                        device = import.Load(Node.selectedBytes);
+                        device3d.Content = device;
+                        viewPort3d.Children.Add(device3d);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error al cargar modelo STL:" + ex.StackTrace, "Error", MessageBoxButton.OK);
+                    }
+                }
+                else if (Path.GetExtension(Node.selectedBytes).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
+                {
+                    Debug.WriteLine("PDF PATH: " + Path.GetFullPath(Node.selectedBytes));
+                    var pathPdf = Path.GetFullPath(Node.selectedBytes);
+                    string adobepath = "C:/Program Files/Adobe/Acrobat DC/Acrobat/Acrobat.exe";
+                    Process.Start(adobepath, @"C:/Users/mauri/Documents/ING/41746B ARCOSA/P0166-115.SLDDRW.A.PDF");
 
+                }
+                else if (Path.GetExtension(Node.selectedBytes).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+                {
+                    Excel.Application excelApp = new Excel.Application();
+                    Excel.Workbook excelWorkbook = null;
+                    Excel.Worksheet excelWorksheet = null;
+                    try
+                    {
+                        excelWorkbook = excelApp.Workbooks.Open(Node.selectedBytes);
+                        excelWorksheet = (Excel.Worksheet)excelWorkbook.ActiveSheet;
+                        excelApp.Visible = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error:" + ex.Message, "error", MessageBoxButton.OK);
+                    }
+
+                }
+                else if (Path.GetExtension(Node.selectedBytes).Equals(".plt", StringComparison.OrdinalIgnoreCase))
+                {
+                    grid3d.Children.Remove(viewPort3d);
+                }
+            }
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)

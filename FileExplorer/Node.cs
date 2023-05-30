@@ -79,7 +79,6 @@ namespace FileExplorer
         private void updateCounts()
         {
             selectedBytes = nodeVal;
-            Debug.WriteLine("Selected : " + selectedBytes);
         }
 
         /* private void UpdateCheckState()
@@ -138,7 +137,6 @@ namespace FileExplorer
                 //add each child directory to children, increase folder count
                 foreach (string d in Directory.GetDirectories(this.fullPath))
                 {
-                    //Debug.WriteLine("PATH FOLDERS:  " + d);
                     DirectoryInfo dirInfo = new DirectoryInfo(d);
                     Node curDNode = new Node()
                     {
@@ -172,7 +170,6 @@ namespace FileExplorer
                         isFile = true,
                         nodeVal = fileInfo.FullName
                     };
-                    // Debug.WriteLine("PATH FILES : "+fileInfo.FullName);
                     this.children.Add(curFNode);
                     ++files;
                 }
