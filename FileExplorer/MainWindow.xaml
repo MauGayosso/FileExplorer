@@ -6,33 +6,33 @@
 		xmlns:local="clr-namespace:FileExplorer"
 		xmlns:prop="clr-namespace:FileExplorer.Properties"
         xmlns:helix="http://helix-toolkit.org/wpf"
-        xmlns:oxy="http://oxyplot.org/wpf"
-        x:Class="FileExplorer.MainWindow"
-		mc:Ignorable="d"
+    x:Class="FileExplorer.MainWindow"
+    mc:Ignorable="d"
 		Closing="Window_Closing"
 		Title="EMPRESA" BorderThickness="0.5,0.5,0.5,0.5" Width="934" Height="550"
     ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
-    <Grid Background="#FFF1EFEF" Height="NaN" Margin="0,0,0,-45" Width="NaN">
+    <Grid Background="#FFF1EFEF" Height="NaN" Margin="0,0,0,-131" Width="NaN">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0*"/>
             <ColumnDefinition Width="0*"/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="41*"/>
+            <ColumnDefinition Width="685*"/>
             <ColumnDefinition Width="Auto" MinWidth="207.81"/>
         </Grid.ColumnDefinitions>
         <Button x:Name="HamburgerButton" Click="HamburgerButton_Click"
-                Margin="0,3,10,0" Width="46" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Column="4" Background="{x:Null}" BorderBrush="{x:Null}" Height="40">
+                Margin="0,3,10,0" Width="46" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Column="5" Background="{x:Null}" BorderBrush="{x:Null}" Height="40">
             <Image Source="user_icon.png" Height="36" Width="45" StretchDirection="DownOnly"/>
         </Button>
         <!-- Menu items -->
         <StackPanel x:Name="MenuItemsPanel"
-                    Visibility="Hidden" Margin="79,10,56,0" Background="White" Grid.Column="4" Width="NaN" VerticalAlignment="Top" Height="80">
+                    Visibility="Hidden" Margin="79,10,56,0" Background="White" Grid.Column="5" Width="NaN" VerticalAlignment="Top" Height="80">
             <Button Click="MenuClick" Content="Menu" Margin="5"/>
             <Button Click="LogOut" Content="Cerrar sesión"/>
             <Button Click="ExitClick" Content="Salir" Margin="5"/>
         </StackPanel>
-        <Canvas Width="380" HorizontalAlignment="Left" Grid.ColumnSpan="4" Height="NaN" Margin="0,48,0,0">
+        <Canvas Width="380" HorizontalAlignment="Left" Grid.ColumnSpan="5" Height="NaN" Margin="0,48,0,0">
             <TextBox x:Name="dirDisplay" IsReadOnly="False" Text="{Binding parseDir}" TextChanged="dirDisplay_TextChanged" Canvas.Top="387" HorizontalAlignment="Left" VerticalAlignment="Top" Width="1" RenderTransformOrigin="0.5,0.5" Canvas.Left="5" >
                 <TextBox.RenderTransform>
                     <TransformGroup>
@@ -142,11 +142,11 @@
                 </ToolBar>
                 <!-- Rest of your window content -->
             </DockPanel>
-            <TreeView x:Name="twSearched" Height="93" Width="351" Canvas.Top="370" Canvas.Left="11" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TreeView x:Name="twSearched" Height="27" Width="351" Canvas.Top="370" Canvas.Left="11" HorizontalAlignment="Center" VerticalAlignment="Top"/>
         </Canvas>
-        <Canvas x:Name="canvav" Background="White" Grid.Column="3" Grid.ColumnSpan="2" Margin="536,101,67,117">
-            <Grid x:Name="grid3d" Height="359" Width="330" Background="#FFFDFDFD" Grid.Column="3">
-                <helix:HelixViewport3D x:Name="viewPort3d" ZoomExtentsWhenLoaded="False" Height="339" Margin="10,0,0,0" Width="310" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" VerticalAlignment="Center" IsHeadLightEnabled="True" >
+        <Canvas x:Name="canvav" Background="BlueViolet" Grid.Column="4" Grid.ColumnSpan="2" Margin="472,90,33,220">
+            <Grid x:Name="grid3d" Height="359" Width="392" Background="Pink" Grid.Column="3" Canvas.Top="-5" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <helix:HelixViewport3D x:Name="viewPort3d" ZoomExtentsWhenLoaded="False" Height="359" Width="320" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" VerticalAlignment="Center" IsHeadLightEnabled="True" >
                     <helix:HelixViewport3D.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform ScaleX="1"/>
@@ -158,7 +158,10 @@
                     <!-- Remember to add light to the scene -->
                     <helix:DefaultLights/>
                 </helix:HelixViewport3D>
-                <Image x:Name="previewImage" />
+                <Image x:Name="previewImage" Margin="4,0,-1,0" />
+                <TextBlock x:Name="txtTextBox" TextWrapping="Wrap" Height="108" Width="233" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Margin="51,94,0,0">
+                </TextBlock>
+                <WebBrowser x:Name="wb"/>
             </Grid>
         </Canvas>
     </Grid>

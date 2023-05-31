@@ -1,0 +1,22 @@
+﻿<Window x:Class="FileExplorer.WindowOptions"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FileExplorer"
+        mc:Ignorable="d"
+        Title="WindowOptions" Height="450" Width="601">
+    <Grid Margin="0,0,10,0">
+        <Canvas Margin="74,82,51,59">
+            <Canvas.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF7BA1FF" Offset="0"/>
+                    <GradientStop Color="#FF1F47A9" Offset="0.85"/>
+                </LinearGradientBrush>
+            </Canvas.Background>
+            <Button x:Name="btnClientes" Content="Consultas" Canvas.Left="33" Canvas.Top="67" Height="160" Width="160" Click="btnClientes_Click"/>
+            <Button x:Name="btnAgregar" Content="Administrar Clientes" Canvas.Left="273" Canvas.Top="67" Height="160" Width="160" HorizontalAlignment="Left" VerticalAlignment="Center" Background="#FFDDDDDD"/>
+        </Canvas>
+
+    </Grid>
+</Window>

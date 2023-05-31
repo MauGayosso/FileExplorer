@@ -1,43 +1,24 @@
 ﻿
+using HelixToolkit.Wpf;
+using iTextSharp.text.pdf;
+using iTextSharp.text.pdf.parser;
 using System;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Windows;
-using System.Windows.Forms;
-using System.Windows.Controls;
-using System.Windows.Threading;
-using System.Runtime.Remoting.Messaging;
-using System.Windows.Input;
 using System.Diagnostics;
-using HelixToolkit;
-using HelixToolkit.Wpf;
+using System.IO;
+using System.Runtime.Remoting.Messaging;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms;
+using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Media3D;
-using System.Net;
-using System.Net.Mail;
+using System.Windows.Threading;
+using Material = System.Windows.Media.Media3D.Material;
 using MessageBox = System.Windows.MessageBox;
 using Outlook = Microsoft.Office.Interop.Outlook;
-using System.Windows.Media;
-using CheckBox = System.Windows.Controls.CheckBox;
-using Assimp;
-using Assimp.Configs;
-using Microsoft.Extensions.Options;
-using Assimp.Unmanaged;
-using Microsoft.Scripting.Hosting;
-using Vector3D = System.Windows.Media.Media3D.Vector3D;
-using System.Runtime.CompilerServices;
-using Material = System.Windows.Media.Media3D.Material;
-using Microsoft.Web.WebView2.Core;
-using Excel = Microsoft.Office.Interop.Excel;
-using System.Windows.Forms.Integration;
-using OxyPlot;
-using OxyPlot.Series;
-using OxyPlot.Axes;
-using System.Collections.Generic;
-using TreeView = System.Windows.Controls.TreeView;
-using Eto;
-using System.Windows.Controls.Primitives;
-using System.Xml.Linq;
-using Windows.Devices.WiFiDirect;
+using Path = System.IO.Path;
 //using SkiaSharp;
 //using SkiaSharp.Views.WPF;
 
@@ -156,7 +137,7 @@ namespace FileExplorer
                 }
                 catch (Exception err)
                 {
-                    System.Windows.MessageBox.Show("There has been an error loading the previously parsed directory.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    System.Windows.MessageBox.Show("There has been an error loading the previously parsed directory. " + err, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             else
             {
@@ -164,7 +145,6 @@ namespace FileExplorer
                 parseDir = Path.GetFullPath(".");
             }
         }
-
         private void createFirstNode()
         {
             //initialize first node to hold all other nodes
@@ -205,7 +185,6 @@ namespace FileExplorer
                 Debug.WriteLine("NEW PATH : " + _NewPath.FullName);
             }
         }
-
         public void viewTree_PreviewMouseRightClickDown(object sender, MouseButtonEventArgs e)
         {
             var carpetaOnly = Path.GetDirectoryName(Node.selectedBytes);
@@ -216,12 +195,9 @@ namespace FileExplorer
             // createFirstNode();
         }
 
-
         public void viewTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
         }
-
-
 
         private void ParseNewDir()
         {
@@ -286,7 +262,7 @@ namespace FileExplorer
             }
             catch (Exception err)
             {
-                System.Windows.MessageBox.Show("There has been an error saving the current directory.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                //System.Windows.MessageBox.Show("There has been an error saving the current directory.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -298,17 +274,8 @@ namespace FileExplorer
 
         private void SendConfirmation()
         {
-            Outlook.Application outlookApp = new Outlook.Application();
-            Outlook.MailItem mailItem = (Outlook.MailItem)outlookApp.CreateItem(Outlook.OlItemType.olMailItem);
-
-            mailItem.Subject = "Hello from test mail";
-            mailItem.Body = "Example of mail";
-            mailItem.To = "maugayosso1405@gmail.com";
-
-            mailItem.Send();
-
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(mailItem);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(outlookApp);
+            WindowMail win = new WindowMail();
+            win.Show();
         }
 
 
@@ -403,28 +370,18 @@ namespace FileExplorer
                 }
                 else if (Path.GetExtension(Node.selectedBytes).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
                 {
-                    Debug.WriteLine("PDF PATH: " + Path.GetFullPath(Node.selectedBytes));
+                    grid3d.Children.Remove(viewPort3d);
+                    grid3d.Children.Remove(txtTextBox);
                     var pathPdf = Path.GetFullPath(Node.selectedBytes);
-                    string adobepath = "C:/Program Files/Adobe/Acrobat DC/Acrobat/Acrobat.exe";
-                    Process.Start(adobepath, @"C:/Users/mauri/Documents/ING/41746B ARCOSA/P0166-115.SLDDRW.A.PDF");
-
+                    //extract_Rev();
+                    //Process.Start(pathPdf);
+                    Uri pdfUri = new Uri(pathPdf);
+                    wb.Source = pdfUri;
                 }
                 else if (Path.GetExtension(Node.selectedBytes).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
                 {
-                    Excel.Application excelApp = new Excel.Application();
-                    Excel.Workbook excelWorkbook = null;
-                    Excel.Worksheet excelWorksheet = null;
-                    try
-                    {
-                        excelWorkbook = excelApp.Workbooks.Open(Node.selectedBytes);
-                        excelWorksheet = (Excel.Worksheet)excelWorkbook.ActiveSheet;
-                        excelApp.Visible = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Error:" + ex.Message, "error", MessageBoxButton.OK);
-                    }
-
+                    var pathExcel = Path.GetFullPath(Node.selectedBytes);
+                    Process.Start(pathExcel);
                 }
                 else if (Path.GetExtension(Node.selectedBytes).Equals(".plt", StringComparison.OrdinalIgnoreCase))
                 {
@@ -453,6 +410,36 @@ namespace FileExplorer
         {
             LoadPathFile();
             ParseNewDir();
+        }
+
+        public void extract_Rev()
+        {
+            string pfdPath = Path.GetFullPath(Node.selectedBytes);
+            string wordReference = "MATERIAL";
+
+            StringBuilder textBuilder = new StringBuilder();
+
+            // Open the PDF file
+            using (PdfReader reader = new PdfReader(pfdPath))
+            {
+                // Iterate over each page of the PDF
+                for (int pageNumber = 1; pageNumber <= reader.NumberOfPages; pageNumber++)
+                {
+                    // Extract text from the current page
+                    string pageText = PdfTextExtractor.GetTextFromPage(reader, pageNumber);
+
+                    // Check if the keyword exists in the extracted text
+                    if (pageText.Contains(wordReference))
+                    {
+                        // Append the extracted text to the StringBuilder
+                        textBuilder.Append(pageText);
+                    }
+                }
+            }
+            // Get the final extracted text
+            string extractedText = textBuilder.ToString();
+            txtTextBox.Text = extractedText;
+            Debug.WriteLine("Revision : " + extractedText);
         }
     }
 }

@@ -69,7 +69,7 @@ namespace FileExplorer
                 
                 if(count > 0) 
                 {
-                    WindowClientsMenu win = new WindowClientsMenu();
+                    WindowOptions win = new WindowOptions();
                     win.Show();
                     Close();
                 }
@@ -83,6 +83,7 @@ namespace FileExplorer
 
         private void btnVisitante_Click(object sender, RoutedEventArgs e)
         {
+
             string nameMachine = System.Environment.MachineName;
             string logFilePath = "C:/Users/mauri/OneDrive/Escritorio/log.txt";
             Debug.WriteLine("Name Machine : " + nameMachine);
@@ -90,7 +91,7 @@ namespace FileExplorer
             {
                 write.WriteLine($"[{DateTime.Now}, {nameMachine}]");
             }
-            WindowAyudasVisuales win = new WindowAyudasVisuales();
+            WindowOptionsAV win = new WindowOptionsAV();
             win.Show();
             Close();
         }
