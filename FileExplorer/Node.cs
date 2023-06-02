@@ -178,7 +178,7 @@ namespace FileExplorer
             }
             catch (Exception err)
             {
-                System.Windows.MessageBox.Show("There has been an error parsing the selected directory.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+               // System.Windows.MessageBox.Show("There has been an error parsing the selected directory.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return null;
         }

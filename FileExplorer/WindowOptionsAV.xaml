@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FileExplorer"
         mc:Ignorable="d"
-        Title="Ayudas Visuales" Height="308" Width="529" ResizeMode="NoResize">
+        Title="Ayudas Visuales" Height="308" Width="529" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" >
     <Grid Margin="1,0,-1,0">
         <ComboBox x:Name="comboBox1" Canvas.Left="165" Canvas.Top="141" Width="168" Height="28">
             <ComboBox.Background>
@@ -22,7 +22,7 @@
             <ComboBoxItem Tag="pintura">PINTURA</ComboBoxItem>
             <ComboBoxItem Tag="soldadura">SOLDADURA</ComboBoxItem>
         </ComboBox>
-        <Button Content="Entrar" HorizontalAlignment="Center" Margin="0,186,0,0" VerticalAlignment="Top" Width="41"/>
-
+        <Button Content="Entrar" HorizontalAlignment="Center" Margin="0,186,0,0" VerticalAlignment="Top" Width="41" Click="Button_Click"/>
+        <StackPanel x:Name="notificationContainer" VerticalAlignment="Top" HorizontalAlignment="Center"/>
     </Grid>
 </Window>

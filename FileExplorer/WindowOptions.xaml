@@ -17,6 +17,5 @@
             <Button x:Name="btnClientes" Content="Consultas" Canvas.Left="33" Canvas.Top="67" Height="160" Width="160" Click="btnClientes_Click"/>
             <Button x:Name="btnAgregar" Content="Administrar Clientes" Canvas.Left="273" Canvas.Top="67" Height="160" Width="160" HorizontalAlignment="Left" VerticalAlignment="Center" Background="#FFDDDDDD"/>
         </Canvas>
-
     </Grid>
 </Window>

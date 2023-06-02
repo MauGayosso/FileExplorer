@@ -1,4 +1,4 @@
-﻿
+﻿using System.Data.OleDb;
 using HelixToolkit.Wpf;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
@@ -9,7 +9,6 @@ using System.IO;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -19,8 +18,28 @@ using Material = System.Windows.Media.Media3D.Material;
 using MessageBox = System.Windows.MessageBox;
 using Outlook = Microsoft.Office.Interop.Outlook;
 using Path = System.IO.Path;
-//using SkiaSharp;
-//using SkiaSharp.Views.WPF;
+using ImageMagick;
+using netDxf;
+using netDxf.Entities;
+using netDxf.Units;
+using System.Drawing;
+using iTextSharp.text;
+using DocumentFormat.OpenXml.Wordprocessing;
+using Windows.Data.Xml.Dom;
+using Windows.Storage;
+using FileAttributes = System.IO.FileAttributes;
+using Microsoft.Office.Interop.Outlook;
+using Windows.Foundation;
+using Shell32;
+using Folder = Shell32.Folder;
+using Microsoft.Scripting.Hosting.Shell;
+using Exception = System.Exception;
+using PdfReader = iTextSharp.text.pdf.PdfReader;
+using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.Office.Interop.Excel;
+using Window = System.Windows.Window;
+using System.Windows.Controls;
 
 namespace FileExplorer
 {
@@ -29,8 +48,10 @@ namespace FileExplorer
     /// </summary>
     public partial class MainWindow : Window
     {
+        OleDbConnection con = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:/Users/mauri/source/repos/FileExplorer/FileExplorer/FileExplorer/MI_DB/attFiles.accdb");
+        string connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:/Users/mauri/source/repos/FileExplorer/FileExplorer/FileExplorer/MI_DB/attFiles.accdb;";
         public static System.Windows.Media.Color WindowGlassColor { get; }
-        public static MainWindow instace;
+        //public static MainWindow instace;
         private delegate Node ParseDirDelegate();
 
         //tree display source
@@ -95,14 +116,12 @@ namespace FileExplorer
         public MainWindow()
         {
             InitializeComponent();
-            //load up last file used
             LoadPathFile();
             DataContext = this;
-            instace = this;
-
             ModelVisual3D device3d = new ModelVisual3D();
-            // device3d.Content = Display3d()
-            Brush titleBarBrush = new SolidColorBrush(WindowGlassColor);
+            //device3d.Content = Display3d();
+            System.Windows.Media.Brush titleBarBrush = new SolidColorBrush(WindowGlassColor);
+
 
         }
         public void path3d(String MODEL_PATH)
@@ -116,7 +135,7 @@ namespace FileExplorer
                     ModelImporter import = new ModelImporter();
                     device = import.Load(MODEL_PATH);
                 }
-                catch (Exception e)
+                catch (System.Exception e)
                 {
                     System.Windows.MessageBox.Show("Exception Error : " + e.StackTrace);
                 }
@@ -197,6 +216,19 @@ namespace FileExplorer
 
         public void viewTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            listFilesNode.Items.Clear();
+            var selectedItem = fileDisplay.SelectedItem as TreeViewItem;
+            if (selectedItem != null)
+            {
+                foreach(var itemInside in selectedItem.Header.ToString())
+                {
+                    listFilesNode.Items.Add(itemInside.ToString());
+                }
+            }
+            else
+            {
+                listFilesNode.Items.Add("NULL");
+            }
         }
 
         private void ParseNewDir()
@@ -222,7 +254,7 @@ namespace FileExplorer
             Node node = parseDelegate.EndInvoke(theResults);
             //Back to the GUI thread to update tree display and counts with newly parsed directory
             //hide parsing msg and display complete msg
-            this.Dispatcher.Invoke(DispatcherPriority.Background, ((Action)(() =>
+            this.Dispatcher.Invoke(DispatcherPriority.Background, ((System.Action)(() =>
             {
                 parseMsg.Visibility = Visibility.Hidden;
                 firstNode = node;
@@ -232,14 +264,16 @@ namespace FileExplorer
             })));
         }
 
-        private void dirDisplay_TextChanged(object sender, TextChangedEventArgs e)
+        private void dirDisplay_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             ParseNewDir();
         }
 
         private void chk_clicked(object sender, RoutedEventArgs e)
         {
+            listAtts.Items.Clear();
             UpdateCounts();
+            attributesFiles();
 
         }
 
@@ -353,7 +387,7 @@ namespace FileExplorer
                     try
                     {
                         Model3D device = null;
-                        Material material = new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(91, 91, 92)));
+                        Material material = new DiffuseMaterial(new SolidColorBrush(System.Windows.Media.Color.FromRgb(91, 91, 92)));
                         ModelVisual3D device3d = new ModelVisual3D();
                         viewPort3d.RotateGesture = new MouseGesture(MouseAction.LeftClick);
                         ModelImporter import = new ModelImporter();
@@ -386,14 +420,26 @@ namespace FileExplorer
                 else if (Path.GetExtension(Node.selectedBytes).Equals(".plt", StringComparison.OrdinalIgnoreCase))
                 {
                     grid3d.Children.Remove(viewPort3d);
+                    grid3d.Children.Remove(txtTextBox);
+                    //ConvertPltToPdf(Node.selectedBytes);
+
+                }
+                else if (Path.GetExtension(Node.selectedBytes).Equals(".dxf", StringComparison.OrdinalIgnoreCase))
+                {
+                    grid3d.Children.Remove(viewPort3d);
+                    grid3d.Children.Remove(txtTextBox);
+                    //ConvertDXFtoJPEG(Node.selectedBytes);
                 }
             }
         }
 
-        private void Save_Click(object sender, RoutedEventArgs e)
+        private void SaveInfoFile_Click(object sender, RoutedEventArgs e)
         {
+            WindowAtts win = new WindowAtts();
+            win.Show();
 
         }
+
         private void folder_click(object sender, RoutedEventArgs e)
         {
             if (Node.selectedBytes == null)
@@ -411,35 +457,26 @@ namespace FileExplorer
             LoadPathFile();
             ParseNewDir();
         }
-
-        public void extract_Rev()
+        public void attributesFiles()
         {
-            string pfdPath = Path.GetFullPath(Node.selectedBytes);
-            string wordReference = "MATERIAL";
-
-            StringBuilder textBuilder = new StringBuilder();
-
-            // Open the PDF file
-            using (PdfReader reader = new PdfReader(pfdPath))
+            var id = Node.selectedBytes;
+            var query = "SELECT * FROM atts WHERE Id_file=@Value1";
+            using (OleDbConnection connection = new OleDbConnection(connectionString))
             {
-                // Iterate over each page of the PDF
-                for (int pageNumber = 1; pageNumber <= reader.NumberOfPages; pageNumber++)
-                {
-                    // Extract text from the current page
-                    string pageText = PdfTextExtractor.GetTextFromPage(reader, pageNumber);
+                connection.Open();
+                OleDbCommand command = new OleDbCommand(query, connection);
+                command.Parameters.AddWithValue("@Value1", id);
+                command.ExecuteNonQuery();
 
-                    // Check if the keyword exists in the extracted text
-                    if (pageText.Contains(wordReference))
-                    {
-                        // Append the extracted text to the StringBuilder
-                        textBuilder.Append(pageText);
-                    }
+                OleDbDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    listAtts.Items.Add("Revision: " + reader.GetValue(1));
+                    listAtts.Items.Add("Materia Prima: " + reader.GetValue(2));
                 }
+                reader.Close();
+                connection.Close();
             }
-            // Get the final extracted text
-            string extractedText = textBuilder.ToString();
-            txtTextBox.Text = extractedText;
-            Debug.WriteLine("Revision : " + extractedText);
         }
     }
 }

@@ -1,16 +1,112 @@
-﻿<Window x:Class="FileExplorer.WindowAyudasVisuales"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:FileExplorer"
+﻿<Window
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="clr-namespace:FileExplorer"
+		xmlns:prop="clr-namespace:FileExplorer.Properties"
+        xmlns:h="http://helix-toolkit.org/wpf" x:Class="FileExplorer.WindowAyudasVisuales"
         mc:Ignorable="d"
-        Title="Catalogo Ayudas Visuales" Height="450" Width="800">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="93*"/>
-            <ColumnDefinition Width="707*"/>
-        </Grid.ColumnDefinitions>
+        Title="Catalogo Ayudas Visuales" SizeToContent="WidthAndHeight" WindowState="Maximized" Width="1368" Height="768">
 
+    <Grid Background="#FFF1EFEF" Height="auto" Width="auto">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="127*"/>
+            <RowDefinition Height="249*"/>
+        </Grid.RowDefinitions>
+
+        <Button x:Name="HamburgerButton" Click="HamburgerButton_Click"
+                Margin="1297,0,0,190" Width="46" HorizontalAlignment="Left" VerticalAlignment="Bottom" Background="{x:Null}" BorderBrush="{x:Null}" Height="51">
+            <Image Source="user_icon.png" Height="36" Width="45" StretchDirection="DownOnly"/>
+        </Button>
+        <StackPanel x:Name="MenuItemsPanel"
+                    Visibility="Visible" Margin="1193,10,0,0" Background="White" Width="99" Height="80" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Button Click="MenuClick" Content="Volver" Margin="5"/>
+            <Button Click="InicioClick" Content="Inicio" Margin="5"/>
+            <Button Click="ExitClick" Content="Salir" Margin="5"/>
+
+        </StackPanel>
+        <TextBox x:Name="dirDisplay" IsReadOnly="False" Text="{Binding parseDir}" TextChanged="dirDisplay_TextChanged" HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" RenderTransformOrigin="0.5,0.5" Margin="0,57,0,0" Height="7" >
+            <TextBox.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="-1" ScaleY="-1"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </TextBox.RenderTransform>
+        </TextBox>
+        <StackPanel  x:Name="parseMsg" Panel.ZIndex="2" Orientation="Horizontal" Margin="46,109,1177,100">
+            <Image  Source="lifttruck.png" VerticalAlignment="Top" Height="40" Width="44"/>
+            <Label  Content="{x:Static prop:Resources.parsingDirectory}" />
+        </StackPanel>
+        <TreeView x:Name="fileDisplay" MouseDoubleClick="viewTree_PreviewMouseRightClickDown" SelectedItemChanged="viewTree_SelectedItemChanged" Height="308" VerticalAlignment="Top" Margin="38,90,0,0" HorizontalAlignment="Left" Width="276" Grid.RowSpan="2" BorderThickness="1.5,1.5,1.5,1.5">
+            <TreeView.Resources>
+                <ContextMenu x:Key="TreeViewContextMenu" x:Name="TreeViewContextMenu">
+                    <MenuItem Header="Open" Click="MenuItem_Click"/>
+                </ContextMenu>
+            </TreeView.Resources>
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type local:Node}" ItemsSource="{Binding children}">
+                    <StackPanel Orientation="Horizontal" >
+                        <CheckBox Click="chk_clicked" IsChecked="{Binding isChecked}" />
+                        <Image Source="{Binding iconLoc}" Width="18" />
+                        <Label Content="{Binding name}" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+        <DockPanel HorizontalAlignment="Left" VerticalAlignment="Center" Width="240" Height="54" Margin="376,0,0,0">
+            <DockPanel.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90 "/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </DockPanel.RenderTransform>
+            <ToolBar Height="36" Width="121" Background="#FFEDD94E">
+                <Button Click="Open_Click">
+                    <Image Source="eye_ico.png" Width="18" Height="18" RenderTransformOrigin="0.5,0.5">
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="-90"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+                </Button>
+                <Separator/>
+                <Button Click="Save_Click">
+                    <Image Source="lupa_icon.png" Width="18" Height="18" RenderTransformOrigin="0.5,0.5">
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="-90"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+                </Button>
+                <Separator/>
+                <Button Click="reloadTreeView_click">
+                    <Image Source="refresh.png" Width="18" Height="18" RenderTransformOrigin="0.5,0.5">
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="-90"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+                </Button>
+            </ToolBar>
+            <!-- Rest of your window content -->
+        </DockPanel>
+        <WebBrowser x:Name="wb" Height="616" Width="933" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="425,90,0,0" Grid.RowSpan="2"/>
     </Grid>
 </Window>

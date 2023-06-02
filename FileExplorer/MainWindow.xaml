@@ -6,13 +6,11 @@
 		xmlns:local="clr-namespace:FileExplorer"
 		xmlns:prop="clr-namespace:FileExplorer.Properties"
         xmlns:helix="http://helix-toolkit.org/wpf"
-    x:Class="FileExplorer.MainWindow"
-    mc:Ignorable="d"
+        x:Class="FileExplorer.MainWindow"
 		Closing="Window_Closing"
-		Title="EMPRESA" BorderThickness="0.5,0.5,0.5,0.5" Width="934" Height="550"
-    ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+		Title="EMPRESA" Width="1368" Height="768" WindowState="Maximized">
 
-    <Grid Background="#FFF1EFEF" Height="NaN" Margin="0,0,0,-131" Width="NaN">
+    <Grid Background="#FFF1EFEF" Height="NaN" Margin="-1,0,1,-131" Width="NaN">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0*"/>
             <ColumnDefinition Width="0*"/>
@@ -32,7 +30,7 @@
             <Button Click="LogOut" Content="Cerrar sesión"/>
             <Button Click="ExitClick" Content="Salir" Margin="5"/>
         </StackPanel>
-        <Canvas Width="380" HorizontalAlignment="Left" Grid.ColumnSpan="5" Height="NaN" Margin="0,48,0,0">
+        <Canvas Width="430" HorizontalAlignment="Left" Grid.ColumnSpan="5" Height="NaN" Margin="0,48,0,0">
             <TextBox x:Name="dirDisplay" IsReadOnly="False" Text="{Binding parseDir}" TextChanged="dirDisplay_TextChanged" Canvas.Top="387" HorizontalAlignment="Left" VerticalAlignment="Top" Width="1" RenderTransformOrigin="0.5,0.5" Canvas.Left="5" >
                 <TextBox.RenderTransform>
                     <TransformGroup>
@@ -44,12 +42,12 @@
                 </TextBox.RenderTransform>
             </TextBox>
             <Button x:Name="btnBuscar" Content="Buscar" Height="26" Click="SearchButton_Click" FontSize="9" Canvas.Left="328" Canvas.Top="12" HorizontalAlignment="Center" VerticalAlignment="Top" Width="34"/>
-            <TextBox x:Name="txtSearch"  HorizontalAlignment="Left" Width="312" Height="26" Canvas.Left="11" Canvas.Top="12" VerticalAlignment="Center" ToolTip="Buscar" Cursor="Help"/>
-            <StackPanel  x:Name="parseMsg" Panel.ZIndex="2" Orientation="Horizontal" Height="29" Canvas.Left="17" Width="145" Canvas.Top="49">
-                <Image  Source="loading.png" VerticalAlignment="Top"/>
+            <TextBox x:Name="txtSearch"  HorizontalAlignment="Left" Width="312" Height="26" Canvas.Left="10" Canvas.Top="12" VerticalAlignment="Center" ToolTip="Buscar" Cursor="Help"/>
+            <StackPanel  x:Name="parseMsg" Panel.ZIndex="2" Orientation="Horizontal" Height="29" Canvas.Left="30" Width="145" Canvas.Top="96">
+                <Image  Source="lifttruck.png" VerticalAlignment="Top"/>
                 <Label  Content="{x:Static prop:Resources.parsingDirectory}" />
             </StackPanel>
-            <TreeView x:Name="fileDisplay" MouseDoubleClick="viewTree_PreviewMouseRightClickDown" SelectedItemChanged="viewTree_SelectedItemChanged" HorizontalAlignment="Center" Width="351" Height="321" VerticalAlignment="Top" Grid.RowSpan="2" Canvas.Left="11" Canvas.Top="44">
+            <TreeView x:Name="fileDisplay" MouseDoubleClick="viewTree_PreviewMouseRightClickDown" SelectedItemChanged="viewTree_SelectedItemChanged" HorizontalAlignment="Left" Width="410" Height="388" VerticalAlignment="Top" Grid.RowSpan="2" Canvas.Left="10" Canvas.Top="83">
                 <TreeView.Resources>
                     <ContextMenu x:Key="TreeViewContextMenu" x:Name="TreeViewContextMenu">
                         <MenuItem Header="Open" Click="MenuItem_Click"/>
@@ -65,7 +63,7 @@
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
-            <DockPanel Canvas.Left="260" Canvas.Top="171" HorizontalAlignment="Left" VerticalAlignment="Center" Width="260" Height="52" RenderTransformOrigin="0.5,0.5">
+            <DockPanel Canvas.Left="304" Canvas.Top="182" HorizontalAlignment="Left" VerticalAlignment="Top" Width="302" Height="72" RenderTransformOrigin="0.5,0.5">
                 <DockPanel.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -74,8 +72,8 @@
                         <TranslateTransform/>
                     </TransformGroup>
                 </DockPanel.RenderTransform>
-                <ToolBar Height="36" Width="167" Background="#FFEDD94E">
-                    <Button Click="Button_Click_1">
+                <ToolBar Height="60" Width="201" Background="#FFEDD94E">
+                    <Button Click="Button_Click_1" Height="34" Width="31">
                         <Image Source="mail_icon.png" Width="18" Height="18" RenderTransformOrigin="0.5,0.5">
                             <Image.RenderTransform>
                                 <TransformGroup>
@@ -89,7 +87,7 @@
                     </Button>
                     <Separator></Separator>
                     <Button Click="Open_Click">
-                        <Image Source="eye_ico.png" Width="18" Height="18" RenderTransformOrigin="0.5,0.5">
+                        <Image Source="eye_ico.png" Width="28" Height="30" RenderTransformOrigin="0.5,0.5">
                             <Image.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
@@ -101,8 +99,8 @@
                         </Image>
                     </Button>
                     <Separator></Separator>
-                    <Button Click="Save_Click">
-                        <Image Source="lupa_icon.png" Width="18" Height="18" RenderTransformOrigin="0.5,0.5">
+                    <Button Click="SaveInfoFile_Click" Height="34" Width="31">
+                        <Image Source="info2.png" Width="25" Height="25" RenderTransformOrigin="0.5,0.5">
                             <Image.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
@@ -114,8 +112,8 @@
                         </Image>
                     </Button>
                     <Separator></Separator>
-                    <Button Click="folder_click">
-                        <Image Source="folder_icon.png" Width="18" Height="18" RenderTransformOrigin="0.5,0.5">
+                    <Button Click="folder_click" Height="31" Width="29">
+                        <Image Source="folder_icon.png" Width="21" Height="21" RenderTransformOrigin="0.5,0.5">
                             <Image.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
@@ -127,8 +125,8 @@
                         </Image>
                     </Button>
                     <Separator></Separator>
-                    <Button Click="reloadTreeView_click">
-                        <Image Source="refresh.png" Width="18" Height="18" RenderTransformOrigin="0.5,0.5">
+                    <Button Click="reloadTreeView_click" Height="34" Width="31">
+                        <Image Source="refresh.png" Width="25" Height="23" RenderTransformOrigin="0.5,0.5">
                             <Image.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
@@ -142,11 +140,25 @@
                 </ToolBar>
                 <!-- Rest of your window content -->
             </DockPanel>
-            <TreeView x:Name="twSearched" Height="27" Width="351" Canvas.Top="370" Canvas.Left="11" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <TreeView x:Name="twSearched" Height="27" Width="352" Canvas.Top="43" Canvas.Left="10" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <ListView x:Name="listAtts" Height="82" Width="414" Canvas.Left="10" Canvas.Top="494" HorizontalAlignment="Center" VerticalAlignment="Top" SelectionMode="Single">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <ListView x:Name="listFilesNode" Height="112" Width="414" Canvas.Left="10" Canvas.Top="601" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
         </Canvas>
         <Canvas x:Name="canvav" Background="BlueViolet" Grid.Column="4" Grid.ColumnSpan="2" Margin="472,90,33,220">
-            <Grid x:Name="grid3d" Height="359" Width="392" Background="Pink" Grid.Column="3" Canvas.Top="-5" HorizontalAlignment="Center" VerticalAlignment="Top">
-                <helix:HelixViewport3D x:Name="viewPort3d" ZoomExtentsWhenLoaded="False" Height="359" Width="320" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" VerticalAlignment="Center" IsHeadLightEnabled="True" >
+            <Grid x:Name="grid3d" Height="567" Width="793" Background="Pink" Grid.Column="3" Canvas.Top="-5" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <helix:HelixViewport3D x:Name="viewPort3d" ZoomExtentsWhenLoaded="False" Width="803" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" IsHeadLightEnabled="True" Height="557" VerticalAlignment="Bottom" >
                     <helix:HelixViewport3D.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform ScaleX="1"/>
@@ -158,10 +170,10 @@
                     <!-- Remember to add light to the scene -->
                     <helix:DefaultLights/>
                 </helix:HelixViewport3D>
-                <Image x:Name="previewImage" Margin="4,0,-1,0" />
-                <TextBlock x:Name="txtTextBox" TextWrapping="Wrap" Height="108" Width="233" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Margin="51,94,0,0">
+                <Image x:Name="previewImage" Margin="4,0,-410,-220" />
+                <TextBlock x:Name="txtTextBox" TextWrapping="Wrap" Height="410" Width="632" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Margin="51,94,0,0">
                 </TextBlock>
-                <WebBrowser x:Name="wb"/>
+                <WebBrowser x:Name="wb" Margin="0,0,-10,0"/>
             </Grid>
         </Canvas>
     </Grid>

@@ -26,7 +26,16 @@ namespace FileExplorer
 
         private void btnClientes_Click(object sender, RoutedEventArgs e)
         {
+            MainWindow winMain = new MainWindow();
             WindowClientsMenu win = new WindowClientsMenu();
+            WindowLogin winLogin = new WindowLogin();
+            WindowMail winMail = new WindowMail();
+            //WindowAyudasVisuales winAyudaV = new WindowAyudasVisuales();
+           // winAyudaV.Close();
+            winMail.Close();
+            winMain.Close();
+            winLogin.Close();
+
             win.Show();
             Close();
         }
