@@ -1,13 +1,10 @@
 ﻿using System.Data.OleDb;
 using HelixToolkit.Wpf;
-using iTextSharp.text.pdf;
-using iTextSharp.text.pdf.parser;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.Remoting.Messaging;
-using System.Text;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -16,30 +13,11 @@ using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 using Material = System.Windows.Media.Media3D.Material;
 using MessageBox = System.Windows.MessageBox;
-using Outlook = Microsoft.Office.Interop.Outlook;
 using Path = System.IO.Path;
-using ImageMagick;
-using netDxf;
-using netDxf.Entities;
-using netDxf.Units;
-using System.Drawing;
-using iTextSharp.text;
-using DocumentFormat.OpenXml.Wordprocessing;
-using Windows.Data.Xml.Dom;
-using Windows.Storage;
-using FileAttributes = System.IO.FileAttributes;
-using Microsoft.Office.Interop.Outlook;
-using Windows.Foundation;
-using Shell32;
-using Folder = Shell32.Folder;
-using Microsoft.Scripting.Hosting.Shell;
 using Exception = System.Exception;
-using PdfReader = iTextSharp.text.pdf.PdfReader;
-using DocumentFormat.OpenXml.Bibliography;
-using DocumentFormat.OpenXml.Spreadsheet;
-using Microsoft.Office.Interop.Excel;
 using Window = System.Windows.Window;
 using System.Windows.Controls;
+using Windows.ApplicationModel.Search;
 
 namespace FileExplorer
 {
@@ -119,8 +97,7 @@ namespace FileExplorer
             LoadPathFile();
             DataContext = this;
             ModelVisual3D device3d = new ModelVisual3D();
-            //device3d.Content = Display3d();
-            System.Windows.Media.Brush titleBarBrush = new SolidColorBrush(WindowGlassColor);
+            Brush titleBarBrush = new SolidColorBrush(WindowGlassColor);
 
 
         }
@@ -131,13 +108,12 @@ namespace FileExplorer
             {
                 try
                 {
-                    //viewPort3d.RotateGesture = new MouseGesture(MouseAction.LeftClick);
                     ModelImporter import = new ModelImporter();
                     device = import.Load(MODEL_PATH);
                 }
                 catch (System.Exception e)
                 {
-                    System.Windows.MessageBox.Show("Exception Error : " + e.StackTrace);
+                    MessageBox.Show("Exception Error : " + e.StackTrace);
                 }
 
             }
@@ -201,34 +177,21 @@ namespace FileExplorer
             DirectoryInfo _NewPath = (DirectoryInfo)newSelected.Tag;
             if (_NewPath != null && !string.IsNullOrWhiteSpace(_NewPath.FullName))
             {
-                Debug.WriteLine("NEW PATH : " + _NewPath.FullName);
+
             }
         }
         public void viewTree_PreviewMouseRightClickDown(object sender, MouseButtonEventArgs e)
         {
             var carpetaOnly = Path.GetDirectoryName(Node.selectedBytes);
-            Debug.WriteLine("1: " + carpetaOnly);
             parseDir = carpetaOnly;
-            //LoadPathFile();
+
             ParseNewDir();
-            // createFirstNode();
+
         }
 
         public void viewTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            listFilesNode.Items.Clear();
-            var selectedItem = fileDisplay.SelectedItem as TreeViewItem;
-            if (selectedItem != null)
-            {
-                foreach(var itemInside in selectedItem.Header.ToString())
-                {
-                    listFilesNode.Items.Add(itemInside.ToString());
-                }
-            }
-            else
-            {
-                listFilesNode.Items.Add("NULL");
-            }
+
         }
 
         private void ParseNewDir()
@@ -258,7 +221,6 @@ namespace FileExplorer
             {
                 parseMsg.Visibility = Visibility.Hidden;
                 firstNode = node;
-                //firstNode.isChecked = false;
                 UpdateCounts();
                 fileDisplay.ItemsSource = treeCtx;
             })));
@@ -271,10 +233,10 @@ namespace FileExplorer
 
         private void chk_clicked(object sender, RoutedEventArgs e)
         {
+            ContentPath();
             listAtts.Items.Clear();
             UpdateCounts();
             attributesFiles();
-
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -292,11 +254,10 @@ namespace FileExplorer
         {
             try
             {
-                System.IO.File.WriteAllText(@"path.txt", parseDir);
+                File.WriteAllText(@"path.txt", parseDir);
             }
             catch (Exception err)
             {
-                //System.Windows.MessageBox.Show("There has been an error saving the current directory.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -312,7 +273,6 @@ namespace FileExplorer
             win.Show();
         }
 
-
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             SendConfirmation();
@@ -322,9 +282,8 @@ namespace FileExplorer
         {
             twSearched.Items.Clear();
             string searchItem = txtSearch.Text;
-            SearchItemTreeView(searchItem);
+            SearchBox(searchItem);
         }
-
         private void SearchItemTreeView(string searchItem)
         {
             string[] files = Directory.GetFiles("C:/Users/mauri/Documents/ING/", searchItem, SearchOption.AllDirectories);
@@ -337,6 +296,22 @@ namespace FileExplorer
                 }
             }
             else
+            {
+
+            }
+        }
+        private void SearchBox(string searchItem)
+        {
+            string[] files = Directory.GetFiles("C:/Users/mauri/Documents/ING/", searchItem + ".*", SearchOption.AllDirectories);
+            foreach (string file in files)
+            {
+
+                twSearched.Items.Add(file);
+            }
+
+            // Recursively search for subdirectories
+            string[] subdirectories = Directory.GetDirectories("C:/Users/mauri/Documents/ING/");
+            foreach (string subdirectory in subdirectories)
             {
 
             }
@@ -375,14 +350,19 @@ namespace FileExplorer
 
         private void Open_Click(object sender, RoutedEventArgs e)
         {
-            if (Node.selectedBytes == null)
+            toolbarOption(Node.selectedBytes);
+        }
+
+        private void toolbarOption(string path)
+        {
+            if (path == null)
             {
-                System.Windows.MessageBox.Show("Selecciona un archivo", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Selecciona un archivo", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
             }
             else
             {
-                if (Path.GetExtension(Node.selectedBytes).Equals(".stl", StringComparison.OrdinalIgnoreCase))
+                if (Path.GetExtension(path).Equals(".stl", StringComparison.OrdinalIgnoreCase))
                 {
                     try
                     {
@@ -393,7 +373,7 @@ namespace FileExplorer
                         ModelImporter import = new ModelImporter();
                         viewPort3d.Children.Remove(device3d);
                         import.DefaultMaterial = material;
-                        device = import.Load(Node.selectedBytes);
+                        device = import.Load(path);
                         device3d.Content = device;
                         viewPort3d.Children.Add(device3d);
                     }
@@ -402,33 +382,31 @@ namespace FileExplorer
                         MessageBox.Show("Error al cargar modelo STL:" + ex.StackTrace, "Error", MessageBoxButton.OK);
                     }
                 }
-                else if (Path.GetExtension(Node.selectedBytes).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
+                else if (Path.GetExtension(path).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
                 {
                     grid3d.Children.Remove(viewPort3d);
                     grid3d.Children.Remove(txtTextBox);
-                    var pathPdf = Path.GetFullPath(Node.selectedBytes);
-                    //extract_Rev();
-                    //Process.Start(pathPdf);
+                    var pathPdf = Path.GetFullPath(path);
                     Uri pdfUri = new Uri(pathPdf);
                     wb.Source = pdfUri;
                 }
-                else if (Path.GetExtension(Node.selectedBytes).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+                else if (Path.GetExtension(path).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
                 {
-                    var pathExcel = Path.GetFullPath(Node.selectedBytes);
+                    var pathExcel = Path.GetFullPath(path);
                     Process.Start(pathExcel);
                 }
-                else if (Path.GetExtension(Node.selectedBytes).Equals(".plt", StringComparison.OrdinalIgnoreCase))
+                else if (Path.GetExtension(path).Equals(".plt", StringComparison.OrdinalIgnoreCase))
                 {
                     grid3d.Children.Remove(viewPort3d);
                     grid3d.Children.Remove(txtTextBox);
-                    //ConvertPltToPdf(Node.selectedBytes);
+
 
                 }
-                else if (Path.GetExtension(Node.selectedBytes).Equals(".dxf", StringComparison.OrdinalIgnoreCase))
+                else if (Path.GetExtension(path).Equals(".dxf", StringComparison.OrdinalIgnoreCase))
                 {
                     grid3d.Children.Remove(viewPort3d);
                     grid3d.Children.Remove(txtTextBox);
-                    //ConvertDXFtoJPEG(Node.selectedBytes);
+
                 }
             }
         }
@@ -444,7 +422,7 @@ namespace FileExplorer
         {
             if (Node.selectedBytes == null)
             {
-                System.Windows.MessageBox.Show("Selecciona un archivo", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Selecciona un archivo", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
@@ -476,6 +454,50 @@ namespace FileExplorer
                 }
                 reader.Close();
                 connection.Close();
+            }
+        }
+
+        private void ContentPath()
+        {
+            string parentPath = Directory.GetParent(Node.selectedBytes).FullName;
+
+            listFilesNode.Items.Clear();
+            var pathF = Path.GetDirectoryName(Node.selectedBytes);
+
+            var path = Directory.GetDirectories(parentPath, "*", SearchOption.TopDirectoryOnly);
+
+            string[] directories = Directory.GetDirectories(pathF);
+            foreach (string directory in directories)
+            {
+
+                listFilesNode.Items.Add("Carpeta: " + directory.Replace(Path.GetDirectoryName(directory) + Path.DirectorySeparatorChar, ""));
+            }
+        }
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            var path = twSearched.SelectedItem.ToString();
+            Debug.WriteLine("clicked : " + twSearched.SelectedItem.ToString());
+            if (Path.GetExtension(path) == ".pdf")
+            {
+                wb.Refresh();
+                grid3d.Children.Remove(viewPort3d);
+                grid3d.Children.Remove(txtTextBox);
+                var pathPdf = Path.GetFullPath(path);
+                Uri pdfUri = new Uri(pathPdf);
+                wb.Source = pdfUri;
+            }
+        }
+        private void MenuItem_Click_2(object sender, RoutedEventArgs e)
+        {
+            var path = twSearched.SelectedItem.ToString();
+            if (path == null)
+            {
+                MessageBox.Show("Selecciona un archivo", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                Process.Start("explorer.exe", Path.GetDirectoryName(path));
             }
         }
     }

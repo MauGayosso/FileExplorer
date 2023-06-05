@@ -11,6 +11,10 @@
 		Title="EMPRESA" Width="1368" Height="768" WindowState="Maximized">
 
     <Grid Background="#FFF1EFEF" Height="NaN" Margin="-1,0,1,-131" Width="NaN">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="294*"/>
+            <RowDefinition Height="589*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0*"/>
             <ColumnDefinition Width="0*"/>
@@ -30,7 +34,7 @@
             <Button Click="LogOut" Content="Cerrar sesión"/>
             <Button Click="ExitClick" Content="Salir" Margin="5"/>
         </StackPanel>
-        <Canvas Width="430" HorizontalAlignment="Left" Grid.ColumnSpan="5" Height="NaN" Margin="0,48,0,0">
+        <Canvas Width="430" HorizontalAlignment="Left" Grid.ColumnSpan="5" Height="NaN" Margin="0,48,0,0" Grid.RowSpan="2">
             <TextBox x:Name="dirDisplay" IsReadOnly="False" Text="{Binding parseDir}" TextChanged="dirDisplay_TextChanged" Canvas.Top="387" HorizontalAlignment="Left" VerticalAlignment="Top" Width="1" RenderTransformOrigin="0.5,0.5" Canvas.Left="5" >
                 <TextBox.RenderTransform>
                     <TransformGroup>
@@ -47,7 +51,7 @@
                 <Image  Source="lifttruck.png" VerticalAlignment="Top"/>
                 <Label  Content="{x:Static prop:Resources.parsingDirectory}" />
             </StackPanel>
-            <TreeView x:Name="fileDisplay" MouseDoubleClick="viewTree_PreviewMouseRightClickDown" SelectedItemChanged="viewTree_SelectedItemChanged" HorizontalAlignment="Left" Width="410" Height="388" VerticalAlignment="Top" Grid.RowSpan="2" Canvas.Left="10" Canvas.Top="83">
+            <TreeView x:Name="fileDisplay" MouseDoubleClick="viewTree_PreviewMouseRightClickDown" SelectedItemChanged="viewTree_SelectedItemChanged" HorizontalAlignment="Left" Width="410" Height="335" VerticalAlignment="Top" Grid.RowSpan="2" Canvas.Left="11" Canvas.Top="96">
                 <TreeView.Resources>
                     <ContextMenu x:Key="TreeViewContextMenu" x:Name="TreeViewContextMenu">
                         <MenuItem Header="Open" Click="MenuItem_Click"/>
@@ -140,23 +144,27 @@
                 </ToolBar>
                 <!-- Rest of your window content -->
             </DockPanel>
-            <TreeView x:Name="twSearched" Height="27" Width="352" Canvas.Top="43" Canvas.Left="10" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <ListView x:Name="listAtts" Height="82" Width="414" Canvas.Left="10" Canvas.Top="494" HorizontalAlignment="Center" VerticalAlignment="Top" SelectionMode="Single">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn/>
-                    </GridView>
-                </ListView.View>
+            <TreeView x:Name="twSearched" Height="35" Width="352" Canvas.Top="43" Canvas.Left="10" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <TreeView.ContextMenu><ContextMenu x:Name="ctxMenu" IsEnabled="True">
+                        <MenuItem Header="Preview" Click="MenuItem_Click_1" IsEnabled="True">
+                            <MenuItem.Icon>
+                                <Image Source="eye_ico.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Open Folder" Click="MenuItem_Click_2" IsEnabled="True">
+                            <MenuItem.Icon>
+                                <Image Source="mail.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+
+                    </ContextMenu></TreeView.ContextMenu>
+            </TreeView>
+            <ListView x:Name="listAtts" Height="82" Width="414" Canvas.Left="10" Canvas.Top="444" HorizontalAlignment="Center" VerticalAlignment="Top" SelectionMode="Single">
             </ListView>
-            <ListView x:Name="listFilesNode" Height="112" Width="414" Canvas.Left="10" Canvas.Top="601" HorizontalAlignment="Center" VerticalAlignment="Top">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn/>
-                    </GridView>
-                </ListView.View>
+            <ListView x:Name="listFilesNode" Height="87" Width="414" Canvas.Left="10" Canvas.Top="549" HorizontalAlignment="Center" VerticalAlignment="Top" SelectionMode="Single">
             </ListView>
         </Canvas>
-        <Canvas x:Name="canvav" Background="BlueViolet" Grid.Column="4" Grid.ColumnSpan="2" Margin="472,90,33,220">
+        <Canvas x:Name="canvav" Background="BlueViolet" Grid.Column="4" Grid.ColumnSpan="2" Margin="472,90,33,220" Grid.RowSpan="2">
             <Grid x:Name="grid3d" Height="567" Width="793" Background="Pink" Grid.Column="3" Canvas.Top="-5" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <helix:HelixViewport3D x:Name="viewPort3d" ZoomExtentsWhenLoaded="False" Width="803" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" IsHeadLightEnabled="True" Height="557" VerticalAlignment="Bottom" >
                     <helix:HelixViewport3D.RenderTransform>
@@ -173,7 +181,7 @@
                 <Image x:Name="previewImage" Margin="4,0,-410,-220" />
                 <TextBlock x:Name="txtTextBox" TextWrapping="Wrap" Height="410" Width="632" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Margin="51,94,0,0">
                 </TextBlock>
-                <WebBrowser x:Name="wb" Margin="0,0,-10,0"/>
+                <WebBrowser x:Name="wb" Margin="0,0,-10,-12"/>
             </Grid>
         </Canvas>
     </Grid>

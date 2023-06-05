@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+
 
 namespace FileExplorer
 {
@@ -26,7 +23,7 @@ namespace FileExplorer
         public static string selectedBytes = "";
 
         //static vars to hold relative file paths for icons
-        public static Uri fileIcon = new Uri("..\\file.png", UriKind.Relative);
+        public static Uri fileIcon = new Uri("..\\document.png", UriKind.Relative);
         public static Uri folderIcon = new Uri("..\\folder.png", UriKind.Relative);
         public static Uri driveIcon = new Uri("..\\drive.png", UriKind.Relative);
         public static Uri loadingIcon = new Uri("..\\loading.png", UriKind.Relative);
@@ -80,21 +77,6 @@ namespace FileExplorer
         {
             selectedBytes = nodeVal;
         }
-
-        /* private void UpdateCheckState()
-         {
-             updateCounts();
-
-             //update children
-             if (children.Count != 0)
-                 UpdateChildrenCheckState();
-             //update parent
-             if(parent != null)
-             {
-                 bool? parentIsChecked = parent.DetermineCheckState();
-                 parent.isChecked = parentIsChecked;
-             }
-         }*/
 
         private void UpdateChildrenCheckState()
         {
@@ -178,7 +160,6 @@ namespace FileExplorer
             }
             catch (Exception err)
             {
-               // System.Windows.MessageBox.Show("There has been an error parsing the selected directory.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return null;
         }
