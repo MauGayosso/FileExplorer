@@ -96,6 +96,9 @@
     <Compile Include="WindowClientsMenu.xaml.cs">
       <DependentUpon>WindowClientsMenu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WindowEdit.xaml.cs">
+      <DependentUpon>WindowEdit.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WindowLogin.xaml.cs">
       <DependentUpon>WindowLogin.xaml</DependentUpon>
     </Compile>
@@ -141,6 +144,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WindowClientsMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WindowEdit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -390,6 +397,7 @@
     <Resource Include="info.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="back.png" />
     <Content Include="Database1.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -397,6 +405,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>Database1.mdf</DependentUpon>
     </Content>
+    <Resource Include="editar.png" />
     <Resource Include="document.png" />
     <Resource Include="info2.png" />
   </ItemGroup>

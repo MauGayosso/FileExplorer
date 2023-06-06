@@ -1,17 +1,10 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data.OleDb;
+
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+
 
 namespace FileExplorer
 {
@@ -20,14 +13,38 @@ namespace FileExplorer
     /// </summary>
     public partial class WindowClientsMenu : Window
     {
+        OleDbConnection con = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:/Users/mauri/source/repos/FileExplorer/FileExplorer/FileExplorer/MI_DB/attFiles.accdb");
+        string connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:/Users/mauri/source/repos/FileExplorer/FileExplorer/FileExplorer/MI_DB/attFiles.accdb;";
+        List<string> clientes = new List<string>();
         public WindowClientsMenu()
         {
             InitializeComponent();
+            getClientes();
         }
 
         private void comboBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        public void getClientes()
+        {
+            var query = "SELECT * FROM clientes";
+            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            {
+                connection.Open();
+                OleDbCommand command = new OleDbCommand(query, connection);
+                command.ExecuteNonQuery();
+
+                OleDbDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    comboBox1.Items.Add(reader.GetValue(0));
+                    clientes.Add(reader.GetValue(0).ToString());
+                }
+                reader.Close();
+                connection.Close();
+            }
         }
 
         private void btnEntrar_Click(object sender, RoutedEventArgs e)
@@ -38,7 +55,9 @@ namespace FileExplorer
             }
             else if (comboBox1.Text == "Cliente 1")
             {
-         
+            }
+            else if (clientes.Contains(comboBox1.Text))
+            {
                 MainWindow win = new MainWindow();
                 win.Show();
                 Close();

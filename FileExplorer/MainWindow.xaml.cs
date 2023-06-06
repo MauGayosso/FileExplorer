@@ -16,8 +16,7 @@ using MessageBox = System.Windows.MessageBox;
 using Path = System.IO.Path;
 using Exception = System.Exception;
 using Window = System.Windows.Window;
-using System.Windows.Controls;
-using Windows.ApplicationModel.Search;
+
 
 namespace FileExplorer
 {
@@ -189,6 +188,7 @@ namespace FileExplorer
 
         }
 
+
         public void viewTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
 
@@ -233,10 +233,11 @@ namespace FileExplorer
 
         private void chk_clicked(object sender, RoutedEventArgs e)
         {
-            ContentPath();
             listAtts.Items.Clear();
+            ContentPath();
+
             UpdateCounts();
-            attributesFiles();
+            attributesFiles(Node.selectedBytes);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -413,8 +414,33 @@ namespace FileExplorer
 
         private void SaveInfoFile_Click(object sender, RoutedEventArgs e)
         {
-            WindowAtts win = new WindowAtts();
-            win.Show();
+            if (Node.selectedBytes != null)
+            {
+                WindowAtts win = new WindowAtts();
+                win.pathPass = Node.selectedBytes;
+                win.loadName(Node.selectedBytes);
+                win.Show();
+            }
+            else
+            {
+                MessageBox.Show("Selecciona un archivo", "Error", MessageBoxButton.OK, (MessageBoxImage)MessageBoxIcon.Exclamation);
+            }
+        }
+
+        private void EditInfoFile_Click(object sender, RoutedEventArgs e)
+        {
+            if (Node.selectedBytes != null)
+            {
+                WindowEdit win = new WindowEdit();
+                win.loadName(Node.selectedBytes);
+                win.atts(Node.selectedBytes);
+                win.pathPass = Node.selectedBytes;
+                win.Show();
+            }
+            else
+            {
+                MessageBox.Show("Selecciona una archivo para editar", "Error");
+            }
 
         }
 
@@ -435,9 +461,23 @@ namespace FileExplorer
             LoadPathFile();
             ParseNewDir();
         }
-        public void attributesFiles()
+
+        private void backTreeView_click(object sender, RoutedEventArgs e)
         {
-            var id = Node.selectedBytes;
+            var carpetaOnly = Path.GetDirectoryName(Path.GetDirectoryName(Node.selectedBytes));
+            if (carpetaOnly != null)
+            {
+                parseDir = carpetaOnly;
+                ParseNewDir();
+            }
+            else
+            {
+                MessageBox.Show("No existen mas carpetas");
+            }
+        }
+
+        public void attributesFiles(string id)
+        {
             var query = "SELECT * FROM atts WHERE Id_file=@Value1";
             using (OleDbConnection connection = new OleDbConnection(connectionString))
             {
@@ -459,8 +499,8 @@ namespace FileExplorer
 
         private void ContentPath()
         {
-            string parentPath = Directory.GetParent(Node.selectedBytes).FullName;
-
+            string parentPath = Directory.GetParent(Node.selectedBytes)?.FullName;
+            Debug.WriteLine("pp: " + Path.GetDirectoryName(parentPath));
             listFilesNode.Items.Clear();
             var pathF = Path.GetDirectoryName(Node.selectedBytes);
 
@@ -477,15 +517,20 @@ namespace FileExplorer
         private void MenuItem_Click_1(object sender, RoutedEventArgs e)
         {
             var path = twSearched.SelectedItem.ToString();
-            Debug.WriteLine("clicked : " + twSearched.SelectedItem.ToString());
-            if (Path.GetExtension(path) == ".pdf")
+            if (path == null)
             {
-                wb.Refresh();
-                grid3d.Children.Remove(viewPort3d);
-                grid3d.Children.Remove(txtTextBox);
-                var pathPdf = Path.GetFullPath(path);
-                Uri pdfUri = new Uri(pathPdf);
-                wb.Source = pdfUri;
+                MessageBox.Show("Seleecionar un archivo");
+            }
+            else
+            {
+                if (Path.GetExtension(path) == ".pdf")
+                {
+                    grid3d.Children.Remove(viewPort3d);
+                    grid3d.Children.Remove(txtTextBox);
+                    var pathPdf = Path.GetFullPath(path);
+                    Uri pdfUri = new Uri(pathPdf);
+                    wb.Source = pdfUri;
+                }
             }
         }
         private void MenuItem_Click_2(object sender, RoutedEventArgs e)
@@ -498,6 +543,37 @@ namespace FileExplorer
             else
             {
                 Process.Start("explorer.exe", Path.GetDirectoryName(path));
+            }
+        }
+
+        private void MenuItem_Click_3(object sender, RoutedEventArgs e)
+        {
+            if (twSearched.SelectedItem != null)
+            {
+                WindowAtts win = new WindowAtts();
+                win.loadName(twSearched.SelectedItem.ToString());
+                win.pathPass = twSearched.SelectedItem.ToString();
+                win.Show();
+            }
+            else
+            {
+                MessageBox.Show("Selecciona un archivo", "Error");
+            }
+        }
+
+        private void MenuItem_Click_4(object sender, RoutedEventArgs e)
+        {
+            if (twSearched.SelectedItem.ToString() != null)
+            {
+                WindowEdit win = new WindowEdit();
+                win.loadName(twSearched.SelectedItem.ToString());
+                win.atts(twSearched.SelectedItem.ToString());
+                win.pathPass = twSearched.SelectedItem.ToString();
+                win.Show();
+            }
+            else
+            {
+                MessageBox.Show("Selecciona una archivo para editar", "Error");
             }
         }
     }

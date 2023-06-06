@@ -1,11 +1,11 @@
-﻿<Window x:Class="FileExplorer.WindowAtts"
+﻿<Window x:Class="FileExplorer.WindowEdit"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FileExplorer"
         mc:Ignorable="d"
-        Title="Propiedades" Height="260" Width="265" ResizeMode="NoResize">
+        Title="WindowEdit" Height="260" Width="265" ResizeMode="NoResize">
     <Grid Height="240" VerticalAlignment="Top" HorizontalAlignment="Left" Width="265">
         <TextBox x:Name="txtRevision" HorizontalAlignment="Left" Margin="36,97,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="179"/>
         <TextBox x:Name="txtMateria" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="179" Margin="36,151,0,0"/>
@@ -14,6 +14,5 @@
         <Label Content="Materia Prima" HorizontalAlignment="Left" Margin="34,120,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtName" HorizontalAlignment="Center" Margin="0,34,0,0" TextWrapping="Wrap" IsReadOnly="True" VerticalAlignment="Top" Width="192" BorderThickness="0,0,0,0" Height="32"/>
         <Label Content="Archivo" HorizontalAlignment="Left" Margin="35,8,0,0" VerticalAlignment="Top" Width="60"/>
-
     </Grid>
 </Window>
