@@ -23,10 +23,10 @@ namespace FileExplorer
         public static string selectedBytes = "";
 
         //static vars to hold relative file paths for icons
-        public static Uri fileIcon = new Uri("..\\document.png", UriKind.Relative);
-        public static Uri folderIcon = new Uri("..\\folder.png", UriKind.Relative);
-        public static Uri driveIcon = new Uri("..\\drive.png", UriKind.Relative);
-        public static Uri loadingIcon = new Uri("..\\loading.png", UriKind.Relative);
+        public static Uri fileIcon = new Uri("image/document.png", UriKind.Relative);
+        public static Uri folderIcon = new Uri("image/folder.png", UriKind.Relative);
+        public static Uri driveIcon = new Uri("image/drive.png", UriKind.Relative);
+        public static Uri loadingIcon = new Uri("image/loading.png", UriKind.Relative);
         public static Uri pathFile = new Uri("file.txt", UriKind.Relative);
 
         //class members

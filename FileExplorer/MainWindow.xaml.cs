@@ -16,9 +16,11 @@ using MessageBox = System.Windows.MessageBox;
 using Path = System.IO.Path;
 using Exception = System.Exception;
 using Window = System.Windows.Window;
-
+using Brush = System.Windows.Media.Brush;
+using DuEDrawingControl;
 
 namespace FileExplorer
+
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -27,8 +29,11 @@ namespace FileExplorer
     {
         OleDbConnection con = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:/Users/mauri/source/repos/FileExplorer/FileExplorer/FileExplorer/MI_DB/attFiles.accdb");
         string connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:/Users/mauri/source/repos/FileExplorer/FileExplorer/FileExplorer/MI_DB/attFiles.accdb;";
-        public static System.Windows.Media.Color WindowGlassColor { get; }
-        //public static MainWindow instace;
+        public static Color WindowGlassColor { get; }
+
+        private DuEDrawingControl.EDrawingWPFControl edrawing;
+        private EDrawingView edrawingView;
+
         private delegate Node ParseDirDelegate();
 
         //tree display source
@@ -97,8 +102,6 @@ namespace FileExplorer
             DataContext = this;
             ModelVisual3D device3d = new ModelVisual3D();
             Brush titleBarBrush = new SolidColorBrush(WindowGlassColor);
-
-
         }
         public void path3d(String MODEL_PATH)
         {
@@ -148,6 +151,7 @@ namespace FileExplorer
                 name = dirInfo.Name,
                 fullPath = parseDir,
                 byteSize = 0,
+
                 parent = null,
                 iconLoc = Node.folderIcon,
                 isFile = false,
@@ -194,7 +198,7 @@ namespace FileExplorer
 
         }
 
-        private void ParseNewDir()
+        public void ParseNewDir()
         {
             //resets all counts and displays to 0
             Node.resetCounts();
@@ -363,10 +367,13 @@ namespace FileExplorer
             }
             else
             {
-                if (Path.GetExtension(path).Equals(".stl", StringComparison.OrdinalIgnoreCase))
+                if (Path.GetExtension(path).Equals(".obj", StringComparison.OrdinalIgnoreCase))
                 {
                     try
                     {
+                        grid3d.Children.Remove(wb);
+                        grid3d.Children.Remove(previewImage);
+                        grid3d.Children.Remove(txtTextBox);
                         Model3D device = null;
                         Material material = new DiffuseMaterial(new SolidColorBrush(System.Windows.Media.Color.FromRgb(91, 91, 92)));
                         ModelVisual3D device3d = new ModelVisual3D();
@@ -377,10 +384,16 @@ namespace FileExplorer
                         device = import.Load(path);
                         device3d.Content = device;
                         viewPort3d.Children.Add(device3d);
+
+                        var readerObj = new ObjReader();
+
+                        var model3D = readerObj.Read(Node.selectedBytes);
+                        var modelVisual3D = new ModelVisual3D();
+                        viewPort3d.Children.Add(modelVisual3D); ;
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error al cargar modelo STL:" + ex.StackTrace, "Error", MessageBoxButton.OK);
+                        MessageBox.Show("Error al cargar modelo:" + ex.StackTrace, "Error", MessageBoxButton.OK);
                     }
                 }
                 else if (Path.GetExtension(path).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
@@ -403,13 +416,20 @@ namespace FileExplorer
 
 
                 }
-                else if (Path.GetExtension(path).Equals(".dxf", StringComparison.OrdinalIgnoreCase))
+                else if (Path.GetExtension(path).Equals(".sldprt", StringComparison.OrdinalIgnoreCase))
                 {
                     grid3d.Children.Remove(viewPort3d);
                     grid3d.Children.Remove(txtTextBox);
-
+                    grid3d.Children.Remove(wb);
+                    var testModel = Node.selectedBytes;
+                    edrawing.EDrawingHost.OpenDoc(testModel, false, false, false);
                 }
             }
+        }
+
+        private void EDrawingHost_OnControlLoaded(dynamic obj)
+        {
+            edrawing.EDrawingHost.OpenDoc(Node.selectedBytes, false, false, false);
         }
 
         private void SaveInfoFile_Click(object sender, RoutedEventArgs e)
@@ -576,5 +596,14 @@ namespace FileExplorer
                 MessageBox.Show("Selecciona una archivo para editar", "Error");
             }
         }
+
+        private void edrawingControl_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void measure_Click(object sender, EventArgs e)
+        {
+        }
+
     }
 }

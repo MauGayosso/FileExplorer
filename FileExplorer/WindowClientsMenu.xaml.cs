@@ -1,7 +1,6 @@
 ﻿
 using System.Collections.Generic;
 using System.Data.OleDb;
-
 using System.Windows;
 using System.Windows.Controls;
 
@@ -49,9 +48,9 @@ namespace FileExplorer
 
         private void btnEntrar_Click(object sender, RoutedEventArgs e)
         {
-            if(comboBox1.Text == null)
+            if (comboBox1.Text == null)
             {
-                MessageBox.Show("Selecciona una opcion para continuar","Advertencia",MessageBoxButton.OK);
+                MessageBox.Show("Selecciona una opcion para continuar", "Advertencia", MessageBoxButton.OK);
             }
             else if (comboBox1.Text == "Cliente 1")
             {
@@ -59,8 +58,10 @@ namespace FileExplorer
             else if (clientes.Contains(comboBox1.Text))
             {
                 MainWindow win = new MainWindow();
+                win.parseDir = "C:/Users/mauri/Documents/ING/ARCOSA/";
+                win.ParseNewDir();
                 win.Show();
-                Close();
+
             }
         }
     }

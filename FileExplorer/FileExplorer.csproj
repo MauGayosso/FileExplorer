@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FileExplorer</RootNamespace>
     <AssemblyName>FileExplorer</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -34,10 +34,10 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -51,6 +51,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>FileExplorer.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ReachFramework" />
@@ -84,6 +87,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Node.cs" />
     <Compile Include="Window3d.xaml.cs">
       <DependentUpon>Window3d.xaml</DependentUpon>
     </Compile>
@@ -111,9 +115,6 @@
     <Compile Include="WindowOptionsAV.xaml.cs">
       <DependentUpon>WindowOptionsAV.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WindowTestDXF.xaml.cs">
-      <DependentUpon>WindowTestDXF.xaml</DependentUpon>
-    </Compile>
     <Page Include="Dictionary1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -126,7 +127,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Node.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -167,10 +167,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WindowTestDXF.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -201,16 +197,16 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="folder.png" />
+    <Resource Include="image\folder.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="drive.png" />
+    <Resource Include="image\drive.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="file.png" />
+    <Resource Include="image\file.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="loading.png" />
+    <Resource Include="image\loading.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
@@ -225,12 +221,21 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="logo1.png" />
+    <Resource Include="image\logo1.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="mail.png" />
+    <Resource Include="image\mail.png" />
   </ItemGroup>
   <ItemGroup>
+    <COMReference Include="EModelView">
+      <Guid>{87BC8396-EFA0-4E81-B67F-9F967152977C}</Guid>
+      <VersionMajor>23</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
     <COMReference Include="MSScriptControl">
       <Guid>{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}</Guid>
       <VersionMajor>1</VersionMajor>
@@ -269,32 +274,44 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="menu_icon.png" />
+    <Resource Include="image\menu_icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="menu_ico.png" />
+    <Resource Include="image\menu_ico.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="exit_icon.png" />
-    <Resource Include="eye_ico.png" />
-    <Resource Include="lupa_icon.png" />
-    <Resource Include="mail_icon.png" />
+    <Resource Include="image\exit_icon.png" />
+    <Resource Include="image\eye_ico.png" />
+    <Resource Include="image\lupa_icon.png" />
+    <Resource Include="image\mail_icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="folder_icon.png" />
+    <Resource Include="image\folder_icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="user_icon.png" />
+    <Resource Include="image\user_icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="refresh.png" />
+    <Resource Include="image\refresh.png" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Aspose.CAD">
+      <Version>23.5.0</Version>
+    </PackageReference>
+    <PackageReference Include="Aspose.Imaging">
+      <Version>23.5.1</Version>
+    </PackageReference>
     <PackageReference Include="AssimpNet">
       <Version>4.1.0</Version>
     </PackageReference>
     <PackageReference Include="DocumentFormat.OpenXml">
       <Version>2.20.0</Version>
+    </PackageReference>
+    <PackageReference Include="DuEDrawingControl">
+      <Version>1.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="Dxflib">
+      <Version>0.3.0</Version>
     </PackageReference>
     <PackageReference Include="DynamicLanguageRuntime">
       <Version>1.3.3</Version>
@@ -338,9 +355,6 @@
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications">
       <Version>7.1.3</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.Toolkit.Wpf.UI.Controls">
-      <Version>6.1.2</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.Web.WebView2">
       <Version>1.0.1774.30</Version>
     </PackageReference>
@@ -365,6 +379,12 @@
     <PackageReference Include="SkiaSharp.Svg">
       <Version>1.60.0</Version>
     </PackageReference>
+    <PackageReference Include="SolidWorks.Interop.sldworks">
+      <Version>30.5.1</Version>
+    </PackageReference>
+    <PackageReference Include="SolidWorks.Interop.swconst">
+      <Version>30.5.1</Version>
+    </PackageReference>
     <PackageReference Include="SQLite">
       <Version>3.13.0</Version>
     </PackageReference>
@@ -388,16 +408,19 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="add.png" />
+    <Resource Include="image\add.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="lifttruck.png" />
+    <Resource Include="image\lifttruck.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="info.png" />
+    <Resource Include="image\info.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="back.png" />
+    <Resource Include="image\back.png" />
+    <Content Include="attFiles.accdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Database1.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -405,9 +428,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>Database1.mdf</DependentUpon>
     </Content>
-    <Resource Include="editar.png" />
-    <Resource Include="document.png" />
-    <Resource Include="info2.png" />
+    <Resource Include="image\editar.png" />
+    <Resource Include="image\document.png" />
+    <Resource Include="image\info2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

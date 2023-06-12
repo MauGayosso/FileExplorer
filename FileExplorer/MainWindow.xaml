@@ -6,14 +6,15 @@
 		xmlns:local="clr-namespace:FileExplorer"
 		xmlns:prop="clr-namespace:FileExplorer.Properties"
         xmlns:helix="http://helix-toolkit.org/wpf"
+        xmlns:edrawing="clr-namespace:DuEDrawingControl;assembly=DuEDrawingControl"
         x:Class="FileExplorer.MainWindow"
 		Closing="Window_Closing"
 		Title="EMPRESA" Width="1368" Height="768" WindowState="Maximized">
 
     <Grid Background="#FFF1EFEF" Height="NaN" Margin="-1,0,1,-131" Width="NaN">
         <Grid.RowDefinitions>
-            <RowDefinition Height="294*"/>
-            <RowDefinition Height="589*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0*"/>
@@ -25,7 +26,7 @@
         </Grid.ColumnDefinitions>
         <Button x:Name="HamburgerButton" Click="HamburgerButton_Click"
                 Margin="0,3,10,0" Width="46" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Column="5" Background="{x:Null}" BorderBrush="{x:Null}" Height="40">
-            <Image Source="user_icon.png" Height="36" Width="45" StretchDirection="DownOnly"/>
+            <Image Source="image/user_icon.png" Height="36" Width="45" StretchDirection="DownOnly"/>
         </Button>
         <!-- Menu items -->
         <StackPanel x:Name="MenuItemsPanel"
@@ -48,7 +49,7 @@
             <Button x:Name="btnBuscar" Content="Buscar" Height="26" Click="SearchButton_Click" FontSize="9" Canvas.Left="328" Canvas.Top="12" HorizontalAlignment="Center" VerticalAlignment="Top" Width="34"/>
             <TextBox x:Name="txtSearch"  HorizontalAlignment="Left" Width="312" Height="26" Canvas.Left="10" Canvas.Top="12" VerticalAlignment="Center" ToolTip="Buscar" Cursor="Help"/>
             <StackPanel  x:Name="parseMsg" Panel.ZIndex="2" Orientation="Horizontal" Height="29" Canvas.Left="21" Width="145" Canvas.Top="106">
-                <Image  Source="lifttruck.png" VerticalAlignment="Top"/>
+                <Image  Source="image/lifttruck.png" VerticalAlignment="Top"/>
                 <Label  Content="{x:Static prop:Resources.parsingDirectory}" />
             </StackPanel>
             <TreeView x:Name="fileDisplay" MouseDoubleClick="viewTree_PreviewMouseRightClickDown" SelectedItemChanged="viewTree_SelectedItemChanged" HorizontalAlignment="Left" Width="430" Height="335" VerticalAlignment="Center" Grid.RowSpan="2" Canvas.Left="11" Canvas.Top="96">
@@ -78,7 +79,7 @@
                 </DockPanel.RenderTransform>
                 <ToolBar Height="60" Width="256" Background="#FFEDD94E">
                     <Button Click="Button_Click_1" Height="34" Width="31">
-                        <Image Source="mail_icon.png" Width="18" Height="18" RenderTransformOrigin="0.5,0.5">
+                        <Image Source="image/mail_icon.png" Width="18" Height="18" RenderTransformOrigin="0.5,0.5">
                             <Image.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
@@ -91,7 +92,7 @@
                     </Button>
                     <Separator></Separator>
                     <Button Click="Open_Click">
-                        <Image Source="eye_ico.png" Width="28" Height="30" RenderTransformOrigin="0.5,0.5">
+                        <Image Source="image/eye_ico.png" Width="28" Height="30" RenderTransformOrigin="0.5,0.5">
                             <Image.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
@@ -104,7 +105,7 @@
                     </Button>
                     <Separator></Separator>
                     <Button Click="folder_click" Height="31" Width="29">
-                        <Image Source="folder_icon.png" Width="21" Height="21" RenderTransformOrigin="0.5,0.5">
+                        <Image Source="image/folder_icon.png" Width="21" Height="21" RenderTransformOrigin="0.5,0.5">
                             <Image.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
@@ -117,7 +118,7 @@
                     </Button>
                     <Separator></Separator>
                     <Button Click="reloadTreeView_click" Height="34" Width="31">
-                        <Image Source="refresh.png" Width="25" Height="23" RenderTransformOrigin="0.5,0.5">
+                        <Image Source="image/refresh.png" Width="25" Height="23" RenderTransformOrigin="0.5,0.5">
                             <Image.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
@@ -130,7 +131,7 @@
                     </Button>
                     <Separator></Separator>
                     <Button Click="backTreeView_click" Height="34" Width="31">
-                        <Image Source="back.png" Width="25" Height="23" RenderTransformOrigin="0.5,0.5">
+                        <Image Source="image/back.png" Width="25" Height="23" RenderTransformOrigin="0.5,0.5">
                             <Image.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
@@ -143,7 +144,7 @@
                     </Button>
                     <Separator></Separator>
                     <Button Click="SaveInfoFile_Click" Height="34" Width="31" ToolBar.OverflowMode="AsNeeded">
-                        <Image Source="info2.png" Width="25" Height="25" RenderTransformOrigin="0.5,0.5">
+                        <Image Source="image/info2.png" Width="25" Height="25" RenderTransformOrigin="0.5,0.5">
                             <Image.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
@@ -155,7 +156,7 @@
                         </Image>
                     </Button>
                     <Button Click="EditInfoFile_Click" Height="34" Width="31" ToolBar.OverflowMode="Always">
-                        <Image Source="editar.png" Width="25" Height="25" RenderTransformOrigin="0.5,0.5">
+                        <Image Source="image/editar.png" Width="25" Height="25" RenderTransformOrigin="0.5,0.5">
                             <Image.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
@@ -175,24 +176,24 @@
                     <ContextMenu x:Name="ctxMenu" IsEnabled="True">
                         <MenuItem Header="Preview" Click="MenuItem_Click_1" IsEnabled="True">
                             <MenuItem.Icon>
-                                <Image Source="eye_ico.png"></Image>
+                                <Image Source="image/eye_ico.png"></Image>
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Open Folder" Click="MenuItem_Click_2" IsEnabled="True">
                             <MenuItem.Icon>
-                                <Image Source="mail.png"></Image>
+                                <Image Source="image/mail.png"></Image>
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Add Data" Click="MenuItem_Click_3" IsEnabled="True">
                             <MenuItem.Icon>
-                                <Image Source="info.png"></Image>
+                                <Image Source="image/info.png"></Image>
                             </MenuItem.Icon>
                         </MenuItem>
-                    <MenuItem Header="Edit Data" Click="MenuItem_Click_4" IsEnabled="True">
-                        <MenuItem.Icon>
-                            <Image Source="editar.png"></Image>
-                        </MenuItem.Icon>
-                    </MenuItem>
+                        <MenuItem Header="Edit Data" Click="MenuItem_Click_4" IsEnabled="True">
+                            <MenuItem.Icon>
+                                <Image Source="image/editar.png"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </ContextMenu>
                 </TreeView.ContextMenu>
             </TreeView>
@@ -201,8 +202,8 @@
             <ListView x:Name="listFilesNode" Height="87" Width="439" Canvas.Left="2" Canvas.Top="549" HorizontalAlignment="Left" VerticalAlignment="Center" SelectionMode="Single">
             </ListView>
         </Canvas>
-        <Canvas x:Name="canvav" Background="BlueViolet" Grid.Column="4" Grid.ColumnSpan="2" Margin="472,90,33,220" Grid.RowSpan="2">
-            <Grid x:Name="grid3d" Height="567" Width="793" Background="Pink" Grid.Column="3" Canvas.Top="-5" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Canvas x:Name="canvav" Grid.Column="4" Grid.ColumnSpan="2" Margin="472,90,33,220" Grid.RowSpan="2">
+            <Grid x:Name="grid3d" Height="567" Width="793" Grid.Column="3" Canvas.Top="-5" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <helix:HelixViewport3D x:Name="viewPort3d" ZoomExtentsWhenLoaded="False" Width="803" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" IsHeadLightEnabled="True" Height="557" VerticalAlignment="Bottom" >
                     <helix:HelixViewport3D.RenderTransform>
                         <TransformGroup>
@@ -219,6 +220,7 @@
                 <TextBlock x:Name="txtTextBox" TextWrapping="Wrap" Height="410" Width="632" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Margin="51,94,0,0">
                 </TextBlock>
                 <WebBrowser x:Name="wb" Margin="0,0,-10,-12"/>
+                <edrawing:EDrawingWPFControl></edrawing:EDrawingWPFControl>
             </Grid>
         </Canvas>
     </Grid>
