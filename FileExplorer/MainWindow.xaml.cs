@@ -32,7 +32,7 @@ namespace FileExplorer
         public static Color WindowGlassColor { get; }
 
         private DuEDrawingControl.EDrawingWPFControl edrawing;
-        private EDrawingView edrawingView;
+        private DuEDrawingControl.EDrawingView edrawingView;
 
         private delegate Node ParseDirDelegate();
 
@@ -102,6 +102,8 @@ namespace FileExplorer
             DataContext = this;
             ModelVisual3D device3d = new ModelVisual3D();
             Brush titleBarBrush = new SolidColorBrush(WindowGlassColor);
+            edrawing = edrawingControl;
+
         }
         public void path3d(String MODEL_PATH)
         {
@@ -366,40 +368,11 @@ namespace FileExplorer
 
             }
             else
-            {
-                if (Path.GetExtension(path).Equals(".obj", StringComparison.OrdinalIgnoreCase))
+            { 
+                if (Path.GetExtension(path).Equals(".PDF", StringComparison.OrdinalIgnoreCase))
                 {
-                    try
-                    {
-                        grid3d.Children.Remove(wb);
-                        grid3d.Children.Remove(previewImage);
-                        grid3d.Children.Remove(txtTextBox);
-                        Model3D device = null;
-                        Material material = new DiffuseMaterial(new SolidColorBrush(System.Windows.Media.Color.FromRgb(91, 91, 92)));
-                        ModelVisual3D device3d = new ModelVisual3D();
-                        viewPort3d.RotateGesture = new MouseGesture(MouseAction.LeftClick);
-                        ModelImporter import = new ModelImporter();
-                        viewPort3d.Children.Remove(device3d);
-                        import.DefaultMaterial = material;
-                        device = import.Load(path);
-                        device3d.Content = device;
-                        viewPort3d.Children.Add(device3d);
-
-                        var readerObj = new ObjReader();
-
-                        var model3D = readerObj.Read(Node.selectedBytes);
-                        var modelVisual3D = new ModelVisual3D();
-                        viewPort3d.Children.Add(modelVisual3D); ;
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Error al cargar modelo:" + ex.StackTrace, "Error", MessageBoxButton.OK);
-                    }
-                }
-                else if (Path.GetExtension(path).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
-                {
-                    grid3d.Children.Remove(viewPort3d);
-                    grid3d.Children.Remove(txtTextBox);
+                    //grid3d.Children.Remove(edrawingControl);
+                    
                     var pathPdf = Path.GetFullPath(path);
                     Uri pdfUri = new Uri(pathPdf);
                     wb.Source = pdfUri;
@@ -409,19 +382,11 @@ namespace FileExplorer
                     var pathExcel = Path.GetFullPath(path);
                     Process.Start(pathExcel);
                 }
-                else if (Path.GetExtension(path).Equals(".plt", StringComparison.OrdinalIgnoreCase))
+                else if (Path.GetExtension(path).Equals(".SLDPRT", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".dxf", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".STEP", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".STL", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".OBJ", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".SDLASM", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".dwg", StringComparison.OrdinalIgnoreCase))
                 {
-                    grid3d.Children.Remove(viewPort3d);
-                    grid3d.Children.Remove(txtTextBox);
-
-
-                }
-                else if (Path.GetExtension(path).Equals(".sldprt", StringComparison.OrdinalIgnoreCase))
-                {
-                    grid3d.Children.Remove(viewPort3d);
-                    grid3d.Children.Remove(txtTextBox);
-                    grid3d.Children.Remove(wb);
-                    var testModel = Node.selectedBytes;
+                    //grid3d.Children.Remove(wb);
+                    edrawing = edrawingControl;
+                    var testModel = Path.GetFullPath(Node.selectedBytes);
                     edrawing.EDrawingHost.OpenDoc(testModel, false, false, false);
                 }
             }
@@ -429,7 +394,10 @@ namespace FileExplorer
 
         private void EDrawingHost_OnControlLoaded(dynamic obj)
         {
-            edrawing.EDrawingHost.OpenDoc(Node.selectedBytes, false, false, false);
+            edrawing = edrawingControl;
+            var testModel = Path.GetFullPath(Node.selectedBytes);
+            edrawing.EDrawingHost.OpenDoc(testModel, false, false, false);
+
         }
 
         private void SaveInfoFile_Click(object sender, RoutedEventArgs e)
@@ -545,8 +513,10 @@ namespace FileExplorer
             {
                 if (Path.GetExtension(path) == ".pdf")
                 {
-                    grid3d.Children.Remove(viewPort3d);
-                    grid3d.Children.Remove(txtTextBox);
+                    // grid3d.Children.Remove(viewPort3d);
+                    // grid3d.Children.Remove(txtTextBox);
+                    grid3d.Children.Remove(edrawingControl);
+
                     var pathPdf = Path.GetFullPath(path);
                     Uri pdfUri = new Uri(pathPdf);
                     wb.Source = pdfUri;
@@ -605,5 +575,9 @@ namespace FileExplorer
         {
         }
 
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
