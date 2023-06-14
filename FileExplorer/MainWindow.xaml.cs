@@ -25,14 +25,19 @@ namespace FileExplorer
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// The variable Node.selectedBytes is to get the path from the checkbox selected ===> It can be modified but you need to do it in the file Node.cs
+    /// This project was made by https://github.com/MauGayosso - period 05/09/23 to 08/18/2023 for the enterprise Maquinados Industriales
     public partial class MainWindow : Window
     {
-        OleDbConnection con = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:/Users/mauri/source/repos/FileExplorer/FileExplorer/FileExplorer/MI_DB/attFiles.accdb");
-        string connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:/Users/mauri/source/repos/FileExplorer/FileExplorer/FileExplorer/MI_DB/attFiles.accdb;";
+        //conection to database in access
+        OleDbConnection con = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:/Users/mauri/source/repos/f/FileExplorer/MI_DB/attFiles.accdb");
+        string connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:/Users/mauri/source/repos/f/FileExplorer/MI_DB/attFiles.accdb;";
         public static Color WindowGlassColor { get; }
 
+        //Reference to a EDrawing to WPF
         private EDrawingWPFControl eDrawingView;
 
+        // Parse Dir
         private delegate Node ParseDirDelegate();
 
         //tree display source
@@ -46,15 +51,18 @@ namespace FileExplorer
             set { SetValue(parseDirProp, value); }
         }
 
+        // Register parseDirProp -> Needs to be modified if you use this code in another window
         public static readonly DependencyProperty parseDirProp =
             DependencyProperty.Register("parseDir", typeof(string), typeof(MainWindow), new PropertyMetadata(""));
 
+        // Number of folders
         public int folders
         {
             get { return (int)GetValue(foldersProp); }
             set { SetValue(foldersProp, value); }
         }
 
+        // Register FoldersProp -> Needs to be modified if you use this code in another window
         public static readonly DependencyProperty foldersProp =
             DependencyProperty.Register("folders", typeof(int), typeof(MainWindow), new PropertyMetadata(0));
 
@@ -64,6 +72,7 @@ namespace FileExplorer
             set { SetValue(filesProp, value); }
         }
 
+        // Register FilesProp -> Needs to be modified if you use this code in another window
         public static readonly DependencyProperty filesProp =
             DependencyProperty.Register("files", typeof(int), typeof(MainWindow), new PropertyMetadata(0));
 
@@ -73,6 +82,7 @@ namespace FileExplorer
             set { SetValue(selectedFoldersProp, value); }
         }
 
+        // Register selectedFoldersProp -> Needs to be modified if you use this code in another window
         public static readonly DependencyProperty selectedFoldersProp =
             DependencyProperty.Register("selectedFolders", typeof(int), typeof(MainWindow), new PropertyMetadata(0));
 
@@ -82,6 +92,7 @@ namespace FileExplorer
             set { SetValue(selectedFilesProp, value); }
         }
 
+        // Register selectedFilesProp -> Needs to be modified if you use this code in another window
         public static readonly DependencyProperty selectedFilesProp =
             DependencyProperty.Register("selectedFiles", typeof(int), typeof(MainWindow), new PropertyMetadata(0));
 
@@ -91,35 +102,17 @@ namespace FileExplorer
             set { SetValue(sizeInBytesProp, value); }
         }
 
+        // Register sizeInBytesProp -> Needs to be modified if you use this code in another window
         public static readonly DependencyProperty sizeInBytesProp =
             DependencyProperty.Register("sizeInBytes", typeof(string), typeof(MainWindow), new PropertyMetadata((string)""));
-        private string MODELPATH = Node.selectedBytes;
         public MainWindow()
         {
             InitializeComponent();
             LoadPathFile();
             DataContext = this;
-            ModelVisual3D device3d = new ModelVisual3D();
             Brush titleBarBrush = new SolidColorBrush(WindowGlassColor);
             eDrawingView = edrawingControl;
 
-        }
-        public void path3d(String MODEL_PATH)
-        {
-            Model3D device = null;
-            if (MODEL_PATH == ".stl")
-            {
-                try
-                {
-                    ModelImporter import = new ModelImporter();
-                    device = import.Load(MODEL_PATH);
-                }
-                catch (System.Exception e)
-                {
-                    MessageBox.Show("Exception Error : " + e.StackTrace);
-                }
-
-            }
         }
 
         public void LoadPathFile()
@@ -193,7 +186,7 @@ namespace FileExplorer
 
         }
 
-
+        //It can be deleted --- Make sure to delete from .xaml
         public void viewTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
 
@@ -220,8 +213,7 @@ namespace FileExplorer
             AsyncResult result = (AsyncResult)theResults;
             ParseDirDelegate parseDelegate = (ParseDirDelegate)result.AsyncDelegate;
             Node node = parseDelegate.EndInvoke(theResults);
-            //Back to the GUI thread to update tree display and counts with newly parsed directory
-            //hide parsing msg and display complete msg
+
             this.Dispatcher.Invoke(DispatcherPriority.Background, ((System.Action)(() =>
             {
                 parseMsg.Visibility = Visibility.Hidden;
@@ -230,6 +222,7 @@ namespace FileExplorer
                 fileDisplay.ItemsSource = treeCtx;
             })));
         }
+
 
         private void dirDisplay_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
@@ -270,7 +263,6 @@ namespace FileExplorer
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             string pathF = Node.selectedBytes;
-
         }
 
         private void SendConfirmation()
@@ -312,7 +304,7 @@ namespace FileExplorer
             foreach (string file in files)
             {
 
-                twSearched.Items.Add(file);
+                twSearched.Items.Add(Path.GetFileName(file));
             }
 
             // Recursively search for subdirectories
@@ -367,11 +359,12 @@ namespace FileExplorer
 
             }
             else
-            { 
+            {
                 if (Path.GetExtension(path).Equals(".PDF", StringComparison.OrdinalIgnoreCase))
                 {
                     //grid3d.Children.Remove(edrawingControl);
-                    
+                    edrawingControl.Visibility = Visibility.Hidden;
+                    wb.Visibility = Visibility.Visible;
                     var pathPdf = Path.GetFullPath(path);
                     Uri pdfUri = new Uri(pathPdf);
                     wb.Source = pdfUri;
@@ -384,6 +377,8 @@ namespace FileExplorer
                 else if (Path.GetExtension(path).Equals(".SLDPRT", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".dxf", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".STEP", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".STL", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".OBJ", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".SDLASM", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".dwg", StringComparison.OrdinalIgnoreCase))
                 {
                     //grid3d.Children.Remove(wb);
+                    wb.Visibility = Visibility.Hidden;
+                    edrawingControl.Visibility = Visibility.Visible;
                     eDrawingView = edrawingControl;
                     var testModel = Path.GetFullPath(Node.selectedBytes);
                     eDrawingView.EDrawingHost.OpenDoc(testModel, false, false, false);
@@ -506,21 +501,32 @@ namespace FileExplorer
             var path = twSearched.SelectedItem.ToString();
             if (path == null)
             {
-                MessageBox.Show("Seleecionar un archivo");
+                MessageBox.Show("Selecciona un archivo", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
             }
             else
             {
-                if (Path.GetExtension(path) == ".pdf")
+                if (Path.GetExtension(path).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
                 {
-                    // grid3d.Children.Remove(viewPort3d);
-                    // grid3d.Children.Remove(txtTextBox);
                     grid3d.Children.Remove(edrawingControl);
-
                     var pathPdf = Path.GetFullPath(path);
                     Uri pdfUri = new Uri(pathPdf);
                     wb.Source = pdfUri;
                 }
+                else if (Path.GetExtension(path).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+                {
+                    var pathExcel = Path.GetFullPath(path);
+                    Process.Start(pathExcel);
+                }
+                else if (Path.GetExtension(path).Equals(".SLDPRT", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".dxf", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".STEP", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".STL", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".OBJ", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".SDLASM", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".dwg", StringComparison.OrdinalIgnoreCase))
+                {
+                    //grid3d.Children.Remove(wb);
+                    eDrawingView = edrawingControl;
+                    var testModel = Path.GetFullPath(path);
+                    eDrawingView.EDrawingHost.OpenDoc(testModel, false, false, false);
+                }
             }
+
         }
         private void MenuItem_Click_2(object sender, RoutedEventArgs e)
         {

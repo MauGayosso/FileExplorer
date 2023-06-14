@@ -414,6 +414,10 @@
     <Resource Include="image\info.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="image\logo1rb.png" />
+    <Resource Include="image\wallpapers.jpg" />
+    <Resource Include="image\logoAb.png" />
+    <Resource Include="image\measure.png" />
     <Resource Include="image\back.png" />
     <Content Include="attFiles.accdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

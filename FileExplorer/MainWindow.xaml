@@ -10,8 +10,11 @@
         x:Class="FileExplorer.MainWindow"
 		Closing="Window_Closing"
 		Title="EMPRESA" Width="1368" Height="768" WindowState="Maximized">
-    
-    <Grid Background="#FFF1EFEF" Height="NaN" Margin="-1,0,1,-131" Width="NaN">
+
+    <Grid Height="NaN" Margin="-1,0,1,-131" Width="NaN">
+        <Grid.Background>
+            <ImageBrush ImageSource="/image/wallpapers.jpg" Stretch="UniformToFill" TileMode="None"/>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
@@ -46,13 +49,13 @@
                     </TransformGroup>
                 </TextBox.RenderTransform>
             </TextBox>
-            <Button x:Name="btnBuscar" Content="Buscar" Height="26" Click="SearchButton_Click" FontSize="9" Canvas.Left="328" Canvas.Top="12" HorizontalAlignment="Center" VerticalAlignment="Top" Width="34"/>
-            <TextBox x:Name="txtSearch"  HorizontalAlignment="Left" Width="312" Height="26" Canvas.Left="10" Canvas.Top="12" VerticalAlignment="Center" ToolTip="Buscar" Cursor="Help"/>
-            <StackPanel  x:Name="parseMsg" Panel.ZIndex="2" Orientation="Horizontal" Height="29" Canvas.Left="21" Width="145" Canvas.Top="106">
+            <Button x:Name="btnBuscar" Content="Buscar" Height="26" Click="SearchButton_Click" FontSize="9" Canvas.Left="327" Canvas.Top="40" HorizontalAlignment="Left" VerticalAlignment="Top" Width="34"/>
+            <TextBox x:Name="txtSearch"  HorizontalAlignment="Center" Width="312" Height="26" Canvas.Left="10" Canvas.Top="40" VerticalAlignment="Top" ToolTip="Buscar" Cursor="Help"/>
+            <StackPanel  x:Name="parseMsg" Panel.ZIndex="2" Orientation="Horizontal" Height="29" Canvas.Left="11" Width="145" Canvas.Top="127">
                 <Image  Source="image/lifttruck.png" VerticalAlignment="Top"/>
-                <Label  Content="{x:Static prop:Resources.parsingDirectory}" />
+                <Label  Content="Cargando..." />
             </StackPanel>
-            <TreeView x:Name="fileDisplay" MouseDoubleClick="viewTree_PreviewMouseRightClickDown" SelectedItemChanged="viewTree_SelectedItemChanged" HorizontalAlignment="Left" Width="430" Height="335" VerticalAlignment="Center" Grid.RowSpan="2" Canvas.Left="11" Canvas.Top="96">
+            <TreeView x:Name="fileDisplay" MouseDoubleClick="viewTree_PreviewMouseRightClickDown" SelectedItemChanged="viewTree_SelectedItemChanged" HorizontalAlignment="Center" Width="430" Height="285" VerticalAlignment="Top" Grid.RowSpan="2" Canvas.Left="11" Canvas.Top="121">
                 <TreeView.Resources>
                     <ContextMenu x:Key="TreeViewContextMenu" x:Name="TreeViewContextMenu">
                         <MenuItem Header="Open" Click="MenuItem_Click"/>
@@ -68,7 +71,7 @@
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
-            <DockPanel Canvas.Left="334" Canvas.Top="182" HorizontalAlignment="Left" VerticalAlignment="Center" Width="302" Height="72" RenderTransformOrigin="0.5,0.5">
+            <DockPanel Canvas.Left="340" Canvas.Top="208" HorizontalAlignment="Left" VerticalAlignment="Top" Width="302" Height="72" RenderTransformOrigin="0.5,0.5">
                 <DockPanel.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -77,7 +80,7 @@
                         <TranslateTransform/>
                     </TransformGroup>
                 </DockPanel.RenderTransform>
-                <ToolBar Height="60" Width="256" Background="#FFEDD94E">
+                <ToolBar Height="60" Width="256" Background="#FFD4E2F1">
                     <Button Click="Button_Click_1" Height="34" Width="31">
                         <Image Source="image/mail_icon.png" Width="18" Height="18" RenderTransformOrigin="0.5,0.5">
                             <Image.RenderTransform>
@@ -93,6 +96,19 @@
                     <Separator></Separator>
                     <Button Click="Open_Click">
                         <Image Source="image/eye_ico.png" Width="28" Height="30" RenderTransformOrigin="0.5,0.5">
+                            <Image.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="-90"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Image.RenderTransform>
+                        </Image>
+                    </Button>
+                    <Separator></Separator>
+                    <Button Click="Button_Click_2" Height="34" Width="31">
+                        <Image Source="image/measure.png" Width="18" Height="18" RenderTransformOrigin="0.5,0.5">
                             <Image.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
@@ -155,6 +171,7 @@
                             </Image.RenderTransform>
                         </Image>
                     </Button>
+
                     <Button Click="EditInfoFile_Click" Height="34" Width="31" ToolBar.OverflowMode="Always">
                         <Image Source="image/editar.png" Width="25" Height="25" RenderTransformOrigin="0.5,0.5">
                             <Image.RenderTransform>
@@ -171,7 +188,7 @@
                 </ToolBar>
                 <!-- Rest of your window content -->
             </DockPanel>
-            <TreeView x:Name="twSearched" Height="35" Width="431" Canvas.Top="43" Canvas.Left="10" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <TreeView x:Name="twSearched" Height="35" Width="431" Canvas.Top="71" Canvas.Left="10" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <TreeView.ContextMenu>
                     <ContextMenu x:Name="ctxMenu" IsEnabled="True">
                         <MenuItem Header="Preview" Click="MenuItem_Click_1" IsEnabled="True">
@@ -197,18 +214,18 @@
                     </ContextMenu>
                 </TreeView.ContextMenu>
             </TreeView>
-            <ListView x:Name="listAtts" Height="82" Width="431" Canvas.Left="10" Canvas.Top="444" HorizontalAlignment="Left" VerticalAlignment="Center" SelectionMode="Single">
+            <ListView x:Name="listAtts" Height="82" Width="431" Canvas.Left="10" Canvas.Top="424" HorizontalAlignment="Center" VerticalAlignment="Top" SelectionMode="Single">
             </ListView>
-            <ListView x:Name="listFilesNode" Height="87" Width="439" Canvas.Left="2" Canvas.Top="549" HorizontalAlignment="Left" VerticalAlignment="Center" SelectionMode="Single">
+            <ListView x:Name="listFilesNode" Height="87" Width="430" Canvas.Left="11" Canvas.Top="521" HorizontalAlignment="Center" VerticalAlignment="Top" SelectionMode="Single">
             </ListView>
         </Canvas>
         <Canvas x:Name="canvav" Grid.Column="4" Grid.ColumnSpan="2" Margin="472,90,33,220" Grid.RowSpan="2">
-            <Grid x:Name="grid3d" Height="567" Width="793" Background="Gray" Grid.Column="3" Canvas.Top="-5" HorizontalAlignment="Left" VerticalAlignment="Top">
-                <edrawing:EDrawingWPFControl Background="Gray" Name="edrawingControl">
-                </edrawing:EDrawingWPFControl>
-                <WebBrowser x:Name="wb" Margin="0,0,-10,-12"/>
+            <Grid x:Name="grid3d" Height="567" Width="793" Grid.Column="3" Canvas.Top="-5" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <edrawing:EDrawingWPFControl Name="edrawingControl"/>
+                <WebBrowser x:Name="wb" Margin="0,0,0,3"/>
             </Grid>
         </Canvas>
-        <Button Grid.Column="4" Content="Button" HorizontalAlignment="Left" Margin="385,484,0,0" Grid.Row="1" VerticalAlignment="Top" Height="25" Width="75" Click="Button_Click_2"/>
+        <Image HorizontalAlignment="Left" Height="70" VerticalAlignment="Center" Width="90" Source="/image/logo1rb.png" Grid.Column="3" Grid.ColumnSpan="2" Margin="9,0,0,0"/>
+        <Image Grid.Column="4" HorizontalAlignment="Left" Height="70" Margin="45,0,0,0" VerticalAlignment="Center" Width="83" Source="/image/logoAb.png"/>
     </Grid>
 </Window>
