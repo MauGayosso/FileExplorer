@@ -31,8 +31,7 @@ namespace FileExplorer
         string connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:/Users/mauri/source/repos/FileExplorer/FileExplorer/FileExplorer/MI_DB/attFiles.accdb;";
         public static Color WindowGlassColor { get; }
 
-        private DuEDrawingControl.EDrawingWPFControl edrawing;
-        private DuEDrawingControl.EDrawingView edrawingView;
+        private EDrawingWPFControl eDrawingView;
 
         private delegate Node ParseDirDelegate();
 
@@ -102,7 +101,7 @@ namespace FileExplorer
             DataContext = this;
             ModelVisual3D device3d = new ModelVisual3D();
             Brush titleBarBrush = new SolidColorBrush(WindowGlassColor);
-            edrawing = edrawingControl;
+            eDrawingView = edrawingControl;
 
         }
         public void path3d(String MODEL_PATH)
@@ -385,18 +384,18 @@ namespace FileExplorer
                 else if (Path.GetExtension(path).Equals(".SLDPRT", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".dxf", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".STEP", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".STL", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".OBJ", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".SDLASM", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".dwg", StringComparison.OrdinalIgnoreCase))
                 {
                     //grid3d.Children.Remove(wb);
-                    edrawing = edrawingControl;
+                    eDrawingView = edrawingControl;
                     var testModel = Path.GetFullPath(Node.selectedBytes);
-                    edrawing.EDrawingHost.OpenDoc(testModel, false, false, false);
+                    eDrawingView.EDrawingHost.OpenDoc(testModel, false, false, false);
                 }
             }
         }
 
         private void EDrawingHost_OnControlLoaded(dynamic obj)
         {
-            edrawing = edrawingControl;
+            eDrawingView = edrawingControl;
             var testModel = Path.GetFullPath(Node.selectedBytes);
-            edrawing.EDrawingHost.OpenDoc(testModel, false, false, false);
+            eDrawingView.EDrawingHost.OpenDoc(testModel, false, false, false);
 
         }
 
@@ -571,13 +570,10 @@ namespace FileExplorer
         {
 
         }
-        private void measure_Click(object sender, EventArgs e)
-        {
-        }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-
+            eDrawingView.Markup.ViewOperator_Set(EMVMarkupOperators.eMVOperatorMeasure);
         }
     }
 }

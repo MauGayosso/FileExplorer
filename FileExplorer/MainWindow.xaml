@@ -204,10 +204,11 @@
         </Canvas>
         <Canvas x:Name="canvav" Grid.Column="4" Grid.ColumnSpan="2" Margin="472,90,33,220" Grid.RowSpan="2">
             <Grid x:Name="grid3d" Height="567" Width="793" Background="Gray" Grid.Column="3" Canvas.Top="-5" HorizontalAlignment="Left" VerticalAlignment="Top">
-                <edrawing:EDrawingWPFControl x:Name="edrawingControl" Loaded="edrawingControl_Loaded" Margin="0,0,-10,-12"></edrawing:EDrawingWPFControl>
+                <edrawing:EDrawingWPFControl Background="Gray" Name="edrawingControl">
+                </edrawing:EDrawingWPFControl>
                 <WebBrowser x:Name="wb" Margin="0,0,-10,-12"/>
             </Grid>
         </Canvas>
-        <Button Grid.Column="4" Content="Button" HorizontalAlignment="Left" Margin="472,639,0,0" Grid.Row="1" VerticalAlignment="Top" Height="25" Width="75" Click="Button_Click_2"/>
+        <Button Grid.Column="4" Content="Button" HorizontalAlignment="Left" Margin="385,484,0,0" Grid.Row="1" VerticalAlignment="Top" Height="25" Width="75" Click="Button_Click_2"/>
     </Grid>
 </Window>
