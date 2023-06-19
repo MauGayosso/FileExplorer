@@ -12,8 +12,8 @@ namespace FileExplorer
     /// </summary>
     public partial class WindowClientsMenu : Window
     {
-        OleDbConnection con = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:/Users/mauri/source/repos/FileExplorer/FileExplorer/FileExplorer/MI_DB/attFiles.accdb");
-        string connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:/Users/mauri/source/repos/FileExplorer/FileExplorer/FileExplorer/MI_DB/attFiles.accdb;";
+        OleDbConnection con = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:/Users/mauri/source/repos/f/FileExplorer/MI_DB/attFiles.accdb");
+        string connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:/Users/mauri/source/repos/f//FileExplorer/MI_DB/attFiles.accdb;";
         List<string> clientes = new List<string>();
         public WindowClientsMenu()
         {
@@ -52,16 +52,17 @@ namespace FileExplorer
             {
                 MessageBox.Show("Selecciona una opcion para continuar", "Advertencia", MessageBoxButton.OK);
             }
-            else if (comboBox1.Text == "Cliente 1")
-            {
-            }
             else if (clientes.Contains(comboBox1.Text))
             {
                 MainWindow win = new MainWindow();
-                win.parseDir = "C:/Users/mauri/Documents/ING/ARCOSA/";
+                win.parseDir = "C:/Users/mauri/Documents/ING/"+comboBox1.Text+"/";
                 win.ParseNewDir();
                 win.Show();
 
+            }
+            else
+            {
+                MessageBox.Show("Cliente no encontrado");
             }
         }
     }

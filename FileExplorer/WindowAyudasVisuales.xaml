@@ -3,29 +3,21 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:notifications="clr-namespace:Notifications.Wpf.Controls;assembly=Notifications.Wpf"
 		xmlns:local="clr-namespace:FileExplorer"
 		xmlns:prop="clr-namespace:FileExplorer.Properties"
-        xmlns:h="http://helix-toolkit.org/wpf" x:Class="FileExplorer.WindowAyudasVisuales"
+        x:Class="FileExplorer.WindowAyudasVisuales"
         mc:Ignorable="d"
         Title="Catalogo Ayudas Visuales" SizeToContent="WidthAndHeight" WindowState="Maximized" Width="1368" Height="768">
 
-    <Grid Background="#FFF1EFEF" Height="auto" Width="auto">
+    <Grid Height="auto" Width="auto">
+        <Grid.Background>
+            <ImageBrush ImageSource="/image/bwall.jpg"/>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="127*"/>
             <RowDefinition Height="249*"/>
         </Grid.RowDefinitions>
-
-        <Button x:Name="HamburgerButton" Click="HamburgerButton_Click"
-                Margin="1297,0,0,190" Width="46" HorizontalAlignment="Left" VerticalAlignment="Bottom" Background="{x:Null}" BorderBrush="{x:Null}" Height="51">
-            <Image Source="user_icon.png" Height="36" Width="45" StretchDirection="DownOnly"/>
-        </Button>
-        <StackPanel x:Name="MenuItemsPanel"
-                    Visibility="Visible" Margin="1193,10,0,0" Background="White" Width="99" Height="80" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <Button Click="MenuClick" Content="Volver" Margin="5"/>
-            <Button Click="InicioClick" Content="Inicio" Margin="5"/>
-            <Button Click="ExitClick" Content="Salir" Margin="5"/>
-
-        </StackPanel>
         <TextBox x:Name="dirDisplay" IsReadOnly="False" Text="{Binding parseDir}" TextChanged="dirDisplay_TextChanged" HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" RenderTransformOrigin="0.5,0.5" Margin="0,57,0,0" Height="7" >
             <TextBox.RenderTransform>
                 <TransformGroup>
@@ -36,11 +28,20 @@
                 </TransformGroup>
             </TextBox.RenderTransform>
         </TextBox>
-        <StackPanel  x:Name="parseMsg" Panel.ZIndex="2" Orientation="Horizontal" Margin="46,109,1177,100">
-            <Image  Source="lifttruck.png" VerticalAlignment="Top" Height="40" Width="44"/>
-            <Label  Content="{x:Static prop:Resources.parsingDirectory}" />
+        <StackPanel  x:Name="parseMsg" Panel.ZIndex="2" Orientation="Horizontal" Margin="30,199,1193,10">
+            <Image  Source="/image/lifttruck.png" VerticalAlignment="Top" Height="40" Width="44"/>
+            <Label  Content="{x:Static prop:Resources.parsingDirectory}" RenderTransformOrigin="0.5,0.5" >
+                <Label.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="0.349"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Label.RenderTransform>
+            </Label>
         </StackPanel>
-        <TreeView x:Name="fileDisplay" MouseDoubleClick="viewTree_PreviewMouseRightClickDown" SelectedItemChanged="viewTree_SelectedItemChanged" Height="308" VerticalAlignment="Top" Margin="38,90,0,0" HorizontalAlignment="Left" Width="276" Grid.RowSpan="2" BorderThickness="1.5,1.5,1.5,1.5">
+        <TreeView x:Name="fileDisplay" MouseDoubleClick="viewTree_PreviewMouseRightClickDown" SelectedItemChanged="viewTree_SelectedItemChanged" Height="379" VerticalAlignment="Top" Margin="11,195,0,0" HorizontalAlignment="Left" Width="334" Grid.RowSpan="2" BorderThickness="1.5,1.5,1.5,1.5">
             <TreeView.Resources>
                 <ContextMenu x:Key="TreeViewContextMenu" x:Name="TreeViewContextMenu">
                     <MenuItem Header="Open" Click="MenuItem_Click"/>
@@ -56,7 +57,7 @@
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-        <DockPanel HorizontalAlignment="Left" VerticalAlignment="Center" Width="240" Height="54" Margin="376,0,0,0">
+        <DockPanel HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="54" Margin="402,242,0,0" Grid.RowSpan="2">
             <DockPanel.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -65,9 +66,9 @@
                     <TranslateTransform/>
                 </TransformGroup>
             </DockPanel.RenderTransform>
-            <ToolBar Height="36" Width="121" Background="#FFEDD94E">
-                <Button Click="Open_Click">
-                    <Image Source="eye_ico.png" Width="18" Height="18" RenderTransformOrigin="0.5,0.5">
+            <ToolBar Height="59" Width="101" Background="#FF4C7DB4">
+                <Button Click="Open_Click" Height="46" Width="34">
+                    <Image Source="/image/eye_ico.png" Width="25" Height="25" RenderTransformOrigin="0.5,0.5">
                         <Image.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -79,21 +80,9 @@
                     </Image>
                 </Button>
                 <Separator/>
-                <Button Click="Save_Click">
-                    <Image Source="lupa_icon.png" Width="18" Height="18" RenderTransformOrigin="0.5,0.5">
-                        <Image.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="-90"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </Image.RenderTransform>
-                    </Image>
-                </Button>
-                <Separator/>
+
                 <Button Click="reloadTreeView_click">
-                    <Image Source="refresh.png" Width="18" Height="18" RenderTransformOrigin="0.5,0.5">
+                    <Image Source="/image/refresh.png" Width="29" Height="27" RenderTransformOrigin="0.5,0.5">
                         <Image.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -108,5 +97,18 @@
             <!-- Rest of your window content -->
         </DockPanel>
         <WebBrowser x:Name="wb" Height="616" Width="933" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="425,90,0,0" Grid.RowSpan="2"/>
+        <notifications:NotificationArea x:Name="WindowArea" Position="BottomLeft"  MaxItems="1" Margin="1,350,7,73" Grid.Row="1"/>
+        <Rectangle HorizontalAlignment="Center" Height="70" VerticalAlignment="Top" Width="1368" Fill="#FFA7C7FF" Opacity="0.4"/>
+        <Image HorizontalAlignment="Left" Height="70" VerticalAlignment="Top" Width="90" Source="/image/logo1rb.png" Grid.Column="3" Grid.ColumnSpan="2" Margin="9,0,0,0"/>
+        <Button x:Name="HamburgerButton" Click="HamburgerButton_Click"
+                Margin="1318,10,0,0" Width="40" HorizontalAlignment="Left" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Height="46" Foreground="{x:Null}">
+            <Image Source="/image/user.png" Height="50" Width="36" StretchDirection="DownOnly"/>
+        </Button>
+        <StackPanel x:Name="MenuItemsPanel"
+                    Visibility="Hidden" Margin="1235,18,50,0" Width="NaN" VerticalAlignment="Top" Height="46">
+            <Button Click="MenuClick" Content="Regresar" Background="White"/>
+            <Button Click="ExitClick" Content="Salir" Background="White"/>
+        </StackPanel>
+        <Image HorizontalAlignment="Left" Height="70" Margin="114,0,0,0" VerticalAlignment="Top" Width="83" Source="/image/logoAb.png"/>
     </Grid>
 </Window>

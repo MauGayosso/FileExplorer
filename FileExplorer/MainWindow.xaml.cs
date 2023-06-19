@@ -139,23 +139,32 @@ namespace FileExplorer
         private void createFirstNode()
         {
             //initialize first node to hold all other nodes
-            DirectoryInfo dirInfo = new DirectoryInfo(parseDir);
-            firstNode = new Node()
+            if (parseDir is null)
             {
-                name = dirInfo.Name,
-                fullPath = parseDir,
-                byteSize = 0,
 
-                parent = null,
-                iconLoc = Node.folderIcon,
-                isFile = false,
-            };
-            ++Node.folders;
-            //add first node to display         
-            treeCtx = new ObservableCollection<Node>()
+            }
+            else
+            {
+                DirectoryInfo dirInfo = new DirectoryInfo(parseDir);
+
+                firstNode = new Node()
+                {
+                    name = dirInfo.Name,
+                    fullPath = parseDir,
+                    byteSize = 0,
+
+                    parent = null,
+                    iconLoc = Node.folderIcon,
+                    isFile = false,
+                };
+                ++Node.folders;
+                //add first node to display         
+                treeCtx = new ObservableCollection<Node>()
             {
                 firstNode
             };
+            }
+           
         }
 
         //update all dependacy properties to current static values in Node class
@@ -362,7 +371,6 @@ namespace FileExplorer
             {
                 if (Path.GetExtension(path).Equals(".PDF", StringComparison.OrdinalIgnoreCase))
                 {
-                    //grid3d.Children.Remove(edrawingControl);
                     edrawingControl.Visibility = Visibility.Hidden;
                     wb.Visibility = Visibility.Visible;
                     var pathPdf = Path.GetFullPath(path);
@@ -374,7 +382,7 @@ namespace FileExplorer
                     var pathExcel = Path.GetFullPath(path);
                     Process.Start(pathExcel);
                 }
-                else if (Path.GetExtension(path).Equals(".SLDPRT", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".dxf", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".STEP", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".STL", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".OBJ", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".SDLASM", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".dwg", StringComparison.OrdinalIgnoreCase))
+                else if (Path.GetExtension(path).Equals(".SLDPRT", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".dxf", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".STEP", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".STL", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".OBJ", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".SDLASM", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".dwg", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".stp", StringComparison.OrdinalIgnoreCase)|| Path.GetExtension(path).Equals(".SLDDRW", StringComparison.OrdinalIgnoreCase))
                 {
                     //grid3d.Children.Remove(wb);
                     wb.Visibility = Visibility.Hidden;
@@ -518,9 +526,8 @@ namespace FileExplorer
                     var pathExcel = Path.GetFullPath(path);
                     Process.Start(pathExcel);
                 }
-                else if (Path.GetExtension(path).Equals(".SLDPRT", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".dxf", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".STEP", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".STL", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".OBJ", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".SDLASM", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".dwg", StringComparison.OrdinalIgnoreCase))
+                else if (Path.GetExtension(path).Equals(".SLDPRT", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".dxf", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".STEP", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".STL", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".OBJ", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".SDLASM", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".dwg", StringComparison.OrdinalIgnoreCase) || Path.GetExtension(path).Equals(".stp", StringComparison.OrdinalIgnoreCase))
                 {
-                    //grid3d.Children.Remove(wb);
                     eDrawingView = edrawingControl;
                     var testModel = Path.GetFullPath(path);
                     eDrawingView.EDrawingHost.OpenDoc(testModel, false, false, false);

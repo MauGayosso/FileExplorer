@@ -14,13 +14,6 @@
                     <GradientStop Color="White" Offset="1"/>
                 </LinearGradientBrush>
             </ComboBox.Background>
-            <ComboBoxItem Tag="corte">CORTE</ComboBoxItem>
-            <ComboBoxItem Tag="detallado">DETALLADO</ComboBoxItem>
-            <ComboBoxItem Tag="doblez">DOBLEZ</ComboBoxItem>
-            <ComboBoxItem Tag="general">GENERAL</ComboBoxItem>
-            <ComboBoxItem Tag="maquinado">MAQUINADO</ComboBoxItem>
-            <ComboBoxItem Tag="pintura">PINTURA</ComboBoxItem>
-            <ComboBoxItem Tag="soldadura">SOLDADURA</ComboBoxItem>
         </ComboBox>
         <Button Content="Entrar" HorizontalAlignment="Center" Margin="0,186,0,0" VerticalAlignment="Top" Width="41" Click="Button_Click"/>
         <StackPanel x:Name="notificationContainer" VerticalAlignment="Top" HorizontalAlignment="Center"/>

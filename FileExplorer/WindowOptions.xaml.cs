@@ -39,5 +39,12 @@ namespace FileExplorer
             win.Show();
             Close();
         }
+
+        private void btnAgregar_Click(object sender, RoutedEventArgs e)
+        {
+            WindowAdmin win = new WindowAdmin();
+            win.Show();
+            Close();
+        }
     }
 }

@@ -23,9 +23,9 @@ namespace FileExplorer
     /// </summary>
     public partial class WindowLogin : Window
     {
-        string pathDB = "C:/Users/mauri/source/repos/FileExplorer/FileExplorer/FileExplorer/MI_DB/clientes.db";
+        string pathDB = "C:/Users/mauri/source/repos/f/FileExplorer/MI_DB/clientes.db";
         SQLiteCommand command;
-        SQLiteConnection connection = new SQLiteConnection($"Data Source=C:/Users/mauri/source/repos/FileExplorer/FileExplorer/FileExplorer/MI_DB/clientes.db;Version=3");
+        SQLiteConnection connection = new SQLiteConnection($"Data Source=C:/Users/mauri/source/repos/f/FileExplorer/MI_DB/clientes.db;Version=3");
         SQLiteDataReader reader;
 
         public WindowLogin()

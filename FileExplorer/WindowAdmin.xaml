@@ -1,0 +1,95 @@
+﻿<Window
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:notifications="clr-namespace:Notifications.Wpf.Controls;assembly=Notifications.Wpf"
+		xmlns:local="clr-namespace:FileExplorer"
+		xmlns:prop="clr-namespace:FileExplorer.Properties"
+        x:Class="FileExplorer.WindowAdmin"
+        mc:Ignorable="d"
+        Title="Administrador" SizeToContent="WidthAndHeight" WindowState="Maximized" Width="1368" Height="768">
+
+    <Grid>
+        <Rectangle HorizontalAlignment="Left" Height="70" VerticalAlignment="Top" Width="1368" Fill="#FFA7C7FF" Opacity="0.4"/>
+        <Image HorizontalAlignment="Left" Height="70" VerticalAlignment="Top" Width="90" Source="/image/logo1rb.png" Grid.Column="3" Grid.ColumnSpan="2" Margin="9,0,0,0"/>
+        <Button x:Name="HamburgerButton" Click="HamburgerButton_Click"
+                Margin="1318,12,0,0" Width="40" HorizontalAlignment="Left" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Height="46" Foreground="{x:Null}">
+            <Image Source="/image/user.png" Height="50" Width="36" StretchDirection="DownOnly"/>
+        </Button>
+        <StackPanel x:Name="MenuItemsPanel"
+                    Visibility="Hidden" Margin="1235,18,50,0" Width="NaN" VerticalAlignment="Top" Height="46">
+            <Button Click="MenuClick" Content="Regresar" Background="White"/>
+            <Button Click="ExitClick" Content="Salir" Background="White"/>
+        </StackPanel>
+        <Image HorizontalAlignment="Left" Height="70" Margin="114,0,0,0" VerticalAlignment="Top" Width="83" Source="/image/logoAb.png"/>
+        <TabControl Margin="0,70,10,0">
+            <TabItem Header="Clientes">
+                <Grid Height="654" VerticalAlignment="Center" HorizontalAlignment="Right" Width="1352">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="533*"/>
+                        <RowDefinition Height="121*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.Background>
+                        <ImageBrush ImageSource="/image/bwall.jpg"/>
+                    </Grid.Background>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="87*"/>
+                        <ColumnDefinition Width="1265*"/>
+                    </Grid.ColumnDefinitions>
+                    <DataGrid x:Name="dynamicTable" AutoGenerateColumns="False" Margin="10,10,1135,60" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Nombre" Binding="{Binding Name}" />
+                            <DataGridTemplateColumn Header="Editar">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Editar" Command="{Binding EditCommand}" CommandParameter="{Binding}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Eliminar">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Eliminar" Command="{Binding DeleteCommand}" CommandParameter="{Binding}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+
+            </TabItem>
+            <TabItem Header="Usuarios">
+                <Grid Background="#FFE5E5E5" Height="654" VerticalAlignment="Center" HorizontalAlignment="Right" Width="1352">
+                    <DataGrid x:Name="dynamicTableUsers" AutoGenerateColumns="False" Margin="0,0,1115,10">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Usuario" Binding="{Binding Name}" />
+                            <DataGridTextColumn Header="Usuario" Binding="{Binding Password}" />
+                            <DataGridTemplateColumn Header="Edit">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Edit" Command="{Binding EditCommand}" CommandParameter="{Binding}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Delete">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Delete" Command="{Binding DeleteCommand}" CommandParameter="{Binding}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Tips" Height="22" Margin="-1,0,0,0" VerticalAlignment="Center">
+                <Grid Background="#FFE5E5E5" Height="654" VerticalAlignment="Center" HorizontalAlignment="Left" Width="1352"/>
+            </TabItem>
+            <TabItem Header="Ayudas Visuales">
+                <Grid Background="#FFE5E5E5" Height="654" VerticalAlignment="Center" HorizontalAlignment="Right" Width="1352"/>
+            </TabItem>
+
+        </TabControl>
+    </Grid>
+</Window>

@@ -5,25 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FileExplorer"
         mc:Ignorable="d"
-        Height="450" Width="800">
-    <Grid Background="#FF0036A0" ShowGridLines="True">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="107*"/>
-            <ColumnDefinition Width="11*"/>
-            <ColumnDefinition Width="7*"/>
-            <ColumnDefinition Width="675*"/>
-        </Grid.ColumnDefinitions>
-        <Canvas HorizontalAlignment="Left" Height="386" VerticalAlignment="Center" Width="372" Background="White" Grid.Column="3" Margin="89,0,0,0">
-            <Image x:Name="imageLogo" Height="108" Width="150" HorizontalAlignment="Left" Canvas.Left="117" Canvas.Top="23" VerticalAlignment="Top" RenderTransformOrigin="0.507,0.482" Source="/logo1.png"/>
+        Height="450" Width="800" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="229*"/>
+            <RowDefinition Height="205*"/>
+        </Grid.RowDefinitions>
+        <Image Source="image/bwall.jpg" Margin="0,-40,-30,-40" HorizontalAlignment="Right" Width="1082" Grid.RowSpan="2">
+            <Image.Effect>
+                <BlurEffect></BlurEffect>
+            </Image.Effect>
+        </Image>
+        <Canvas HorizontalAlignment="Center" Height="345" VerticalAlignment="Top" Width="300" Background="#FFB1CAF6" Margin="0,24,0,0" Grid.RowSpan="2" Opacity="0.8">
+            <Image x:Name="imageLogo" Height="80" Width="112" HorizontalAlignment="Left" Canvas.Left="30" Canvas.Top="30" VerticalAlignment="Top" RenderTransformOrigin="0.507,0.482" Source="/image/logo1rb.png"/>
         </Canvas>
-        <Canvas Margin="165,188,290,79" Background="#FFE6E6E6" Grid.Column="3">
+        <Canvas Margin="0,142,0,0" HorizontalAlignment="Center" Width="204" Height="167" VerticalAlignment="Top" Grid.RowSpan="2">
             <TextBox x:Name="txtUsuario" TextWrapping="Wrap" Canvas.Top="43" Width="120" TextChanged="txtUsuario_TextChanged" HorizontalAlignment="Left" Canvas.Left="50" VerticalAlignment="Top"/>
             <Label Content="Usuario" Canvas.Left="50" Canvas.Top="17" Width="53" HorizontalAlignment="Left" VerticalAlignment="Top"/>
             <Label Content="Contraseña" Canvas.Left="50" Canvas.Top="71"/>
             <PasswordBox x:Name="txtPassword" Canvas.Left="50" Canvas.Top="97" Width="120" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         </Canvas>
-        <Button x:Name="btnEntrar" Content="Entrar" HorizontalAlignment="Left" Margin="252,324,0,0" VerticalAlignment="Top" Click="Button_Click" Background="White" Width="46" RenderTransformOrigin="0.5,0.5" Grid.Column="3"/>
-        <Button x:Name="btnVisitante" Grid.Column="3" Content="Visitante" HorizontalAlignment="Left" Margin="238,372,0,0" VerticalAlignment="Top" Width="74" Click="btnVisitante_Click"/>
+        <Button x:Name="btnEntrar" Content="Entrar" HorizontalAlignment="Center" Margin="0,40,0,0" VerticalAlignment="Top" Click="Button_Click" Background="White" Width="46" RenderTransformOrigin="0.5,0.5" Grid.Row="1"/>
+        <Button x:Name="btnVisitante" Content="Visitante" HorizontalAlignment="Center" Margin="0,120,0,0" VerticalAlignment="Top" Width="74" Click="btnVisitante_Click" Grid.Row="1"/>
 
     </Grid>
+
 </Window>

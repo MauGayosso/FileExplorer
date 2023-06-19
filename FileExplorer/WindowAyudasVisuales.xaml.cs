@@ -1,7 +1,4 @@
-﻿using HelixToolkit.Wpf;
-using iTextSharp.text.pdf;
-using iTextSharp.text.pdf.parser;
-using netDxf.Entities;
+﻿
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -20,6 +17,12 @@ using Material = System.Windows.Media.Media3D.Material;
 using MessageBox = System.Windows.MessageBox;
 using Outlook = Microsoft.Office.Interop.Outlook;
 using Path = System.IO.Path;
+using Notifications.Wpf;
+using Aspose.CAD.FileFormats.Cgm;
+using System.Collections.Generic;
+using Notifications.Wpf.Controls;
+using Newtonsoft.Json.Linq;
+using System.Data.OleDb;
 
 namespace FileExplorer
 {
@@ -29,8 +32,15 @@ namespace FileExplorer
     public partial class WindowAyudasVisuales : Window
     {
         public static System.Windows.Media.Color WindowGlassColor { get; }
-        //public static WindowAyudasVisuales instace;
+        string connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:/Users/mauri/source/repos/f//FileExplorer/attFiles.accdb;";
+        List<string> titulos = new List<string>();
+        List<string> mensajes = new List<string>();
+
         private delegate Node ParseDirDelegate();
+        // Notifications
+        private readonly NotificationManager notificationManager = new NotificationManager();
+        private readonly DispatcherTimer timer = new DispatcherTimer();
+        private readonly List<NotificationContent> notifications = new List<NotificationContent>();
 
         //tree display source
         ObservableCollection<Node> treeCtx = new ObservableCollection<Node>();
@@ -97,31 +107,70 @@ namespace FileExplorer
             InitializeComponent();
             LoadPathFile();
             DataContext = this;
-            //instace = this;
-            // device3d.Content = Display3d()
             Brush titleBarBrush = new SolidColorBrush(WindowGlassColor);
+
+            getMessages();
+            foreach (var m in mensajes)
+            {
+                notifications.Add(new NotificationContent { Title = "Tip", Message = m, Type = NotificationType.Information });
+            }
+
+            // Configure and start the timer
+            timer.Interval = TimeSpan.FromSeconds(5);
+            timer.Tick += Timer_Tick;
+            timer.Start();
         }
 
+        private void getMessages()
+        {
+            var query = "SELECT * FROM messages";
+            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            {
+                connection.Open();
+                OleDbCommand command = new OleDbCommand(query, connection);
+                command.ExecuteNonQuery();
+
+                OleDbDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    Debug.WriteLine(reader.GetValue(0));
+                    mensajes.Add(reader.GetValue(0).ToString());
+                }
+                reader.Close();
+                connection.Close();
+            }
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            // Get a random notification from the list
+            Random random = new Random();
+            int index = random.Next(notifications.Count);
+            NotificationContent notification = notifications[index];
+
+            // Show the notification
+            notificationManager.Show(notification, areaName: "WindowArea");
+        }
         public void LoadPathFile()
         {
             //if saved path exists load else parse current dir
-            if (File.Exists("./pathAVCorte.txt"))
-                try
-                {
-                    using (StreamReader inputFile = new StreamReader("pathAVCorte.txt", true))
-                    {
-                        parseDirCorte = inputFile.ReadLine();
-                    }
-                }
-                catch (Exception err)
-                {
-                    MessageBox.Show("There has been an error loading the previously parsed directory. " + err, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            else
-            {
-                //Get full path of current directory
-                parseDirCorte = Path.GetFullPath(".");
-            }
+            /* if (File.Exists("./pathAVCorte.txt"))
+                 try
+                 {
+                     using (StreamReader inputFile = new StreamReader("./pathAVCorte.txt", true))
+                     {
+                         parseDirCorte = inputFile.ReadLine();
+                     }
+                 }
+                 catch (Exception err)
+                 {
+                     MessageBox.Show("There has been an error loading the previously parsed directory. " + err, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                 }
+             else
+             {
+                 //Get full path of current directory
+                 parseDirCorte = Path.GetFullPath(".");
+             }*/
         }
         private void createFirstNode()
         {
@@ -246,6 +295,7 @@ namespace FileExplorer
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             string pathF = Node.selectedBytes;
+            timer.Stop();
 
         }
 
@@ -253,7 +303,7 @@ namespace FileExplorer
         {
             //twSearched.Items.Clear();
             //string searchItem = txtSearch.Text;
-           // SearchItemTreeView(searchItem);
+            // SearchItemTreeView(searchItem);
         }
 
         private void SearchItemTreeView(string searchItem)
@@ -264,7 +314,7 @@ namespace FileExplorer
                 // return files[0]
                 foreach (string file in files)
                 {
-                  //  twSearched.Items.Add(file);
+                    //  twSearched.Items.Add(file);
                 }
             }
             else
@@ -289,13 +339,16 @@ namespace FileExplorer
         {
             //MainWindow winMain = new MainWindow();
             //winMain.Close();
+            timer.Stop();
             WindowOptionsAV win = new WindowOptionsAV();
             win.Show();
             Close();
         }
 
         private void ExitClick(object sender, RoutedEventArgs e)
+
         {
+            timer.Stop();
             Close();
         }
 
@@ -308,7 +361,7 @@ namespace FileExplorer
             }
             else
             {
-               
+
                 if (Path.GetExtension(Node.selectedBytes).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
                 {
                     var pathPdf = Path.GetFullPath(Node.selectedBytes);
@@ -349,14 +402,17 @@ namespace FileExplorer
 
         private void InicioClick(object sender, RoutedEventArgs e)
         {
+            timer.Stop();
             WindowLogin win = new WindowLogin();
             WindowMail winMail = new WindowMail();
-           // MainWindow winMain = new MainWindow();
-           // winMain.Close();
+            // MainWindow winMain = new MainWindow();
+            // winMain.Close();
             winMail.Close();
             win.Show();
             Close();
         }
+
     }
 }
+
 

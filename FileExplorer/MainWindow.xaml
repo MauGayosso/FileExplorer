@@ -3,6 +3,7 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
 		xmlns:local="clr-namespace:FileExplorer"
 		xmlns:prop="clr-namespace:FileExplorer.Properties"
         xmlns:helix="http://helix-toolkit.org/wpf"
@@ -13,11 +14,11 @@
 
     <Grid Height="NaN" Margin="-1,0,1,-131" Width="NaN">
         <Grid.Background>
-            <ImageBrush ImageSource="/image/wallpapers.jpg" Stretch="UniformToFill" TileMode="None"/>
+            <ImageBrush ImageSource="/image/bwall.jpg"/>
         </Grid.Background>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
+            <RowDefinition Height="90*"/>
+            <RowDefinition Height="793*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0*"/>
@@ -27,17 +28,7 @@
             <ColumnDefinition Width="685*"/>
             <ColumnDefinition Width="Auto" MinWidth="207.81"/>
         </Grid.ColumnDefinitions>
-        <Button x:Name="HamburgerButton" Click="HamburgerButton_Click"
-                Margin="0,3,10,0" Width="46" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Column="5" Background="{x:Null}" BorderBrush="{x:Null}" Height="40">
-            <Image Source="image/user_icon.png" Height="36" Width="45" StretchDirection="DownOnly"/>
-        </Button>
         <!-- Menu items -->
-        <StackPanel x:Name="MenuItemsPanel"
-                    Visibility="Hidden" Margin="79,10,56,0" Background="White" Grid.Column="5" Width="NaN" VerticalAlignment="Top" Height="80">
-            <Button Click="MenuClick" Content="Menu" Margin="5"/>
-            <Button Click="LogOut" Content="Cerrar sesión"/>
-            <Button Click="ExitClick" Content="Salir" Margin="5"/>
-        </StackPanel>
         <Canvas Width="451" HorizontalAlignment="Left" Grid.ColumnSpan="5" Height="NaN" Margin="0,48,0,0" Grid.RowSpan="2">
             <TextBox x:Name="dirDisplay" IsReadOnly="False" Text="{Binding parseDir}" TextChanged="dirDisplay_TextChanged" Canvas.Top="387" HorizontalAlignment="Left" VerticalAlignment="Top" Width="1" RenderTransformOrigin="0.5,0.5" Canvas.Left="5" >
                 <TextBox.RenderTransform>
@@ -49,13 +40,13 @@
                     </TransformGroup>
                 </TextBox.RenderTransform>
             </TextBox>
-            <Button x:Name="btnBuscar" Content="Buscar" Height="26" Click="SearchButton_Click" FontSize="9" Canvas.Left="327" Canvas.Top="40" HorizontalAlignment="Left" VerticalAlignment="Top" Width="34"/>
-            <TextBox x:Name="txtSearch"  HorizontalAlignment="Center" Width="312" Height="26" Canvas.Left="10" Canvas.Top="40" VerticalAlignment="Top" ToolTip="Buscar" Cursor="Help"/>
-            <StackPanel  x:Name="parseMsg" Panel.ZIndex="2" Orientation="Horizontal" Height="29" Canvas.Left="11" Width="145" Canvas.Top="127">
+            <Button x:Name="btnBuscar" Content="Buscar" Height="26" Click="SearchButton_Click" FontSize="9" Canvas.Left="387" Canvas.Top="40" Width="54" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBox x:Name="txtSearch"  HorizontalAlignment="Left" Width="371" Height="26" Canvas.Left="11" Canvas.Top="40" ToolTip="Buscar" Cursor="Help" VerticalAlignment="Center"/>
+            <StackPanel  x:Name="parseMsg" Panel.ZIndex="2" Orientation="Horizontal" Height="29" Canvas.Left="26" Width="145" Canvas.Top="132">
                 <Image  Source="image/lifttruck.png" VerticalAlignment="Top"/>
                 <Label  Content="Cargando..." />
             </StackPanel>
-            <TreeView x:Name="fileDisplay" MouseDoubleClick="viewTree_PreviewMouseRightClickDown" SelectedItemChanged="viewTree_SelectedItemChanged" HorizontalAlignment="Center" Width="430" Height="285" VerticalAlignment="Top" Grid.RowSpan="2" Canvas.Left="11" Canvas.Top="121">
+            <TreeView x:Name="fileDisplay" MouseDoubleClick="viewTree_PreviewMouseRightClickDown" SelectedItemChanged="viewTree_SelectedItemChanged" HorizontalAlignment="Center" Width="430" Height="285" VerticalAlignment="Top" Grid.RowSpan="2" Canvas.Left="11" Canvas.Top="121" Background="White">
                 <TreeView.Resources>
                     <ContextMenu x:Key="TreeViewContextMenu" x:Name="TreeViewContextMenu">
                         <MenuItem Header="Open" Click="MenuItem_Click"/>
@@ -64,7 +55,7 @@
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type local:Node}" ItemsSource="{Binding children}">
                         <StackPanel Orientation="Horizontal" >
-                            <CheckBox Click="chk_clicked" IsChecked="{Binding isChecked}" />
+                            <CheckBox  Click="chk_clicked" IsChecked="{Binding isChecked}" />
                             <Image Source="{Binding iconLoc}" Width="18" />
                             <Label Content="{Binding name}" />
                         </StackPanel>
@@ -188,7 +179,7 @@
                 </ToolBar>
                 <!-- Rest of your window content -->
             </DockPanel>
-            <TreeView x:Name="twSearched" Height="35" Width="431" Canvas.Top="71" Canvas.Left="10" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <TreeView x:Name="twSearched" Height="35" Width="431" Canvas.Top="71" Canvas.Left="10" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#FFFDFDFD">
                 <TreeView.ContextMenu>
                     <ContextMenu x:Name="ctxMenu" IsEnabled="True">
                         <MenuItem Header="Preview" Click="MenuItem_Click_1" IsEnabled="True">
@@ -214,18 +205,30 @@
                     </ContextMenu>
                 </TreeView.ContextMenu>
             </TreeView>
-            <ListView x:Name="listAtts" Height="82" Width="431" Canvas.Left="10" Canvas.Top="424" HorizontalAlignment="Center" VerticalAlignment="Top" SelectionMode="Single">
-            </ListView>
-            <ListView x:Name="listFilesNode" Height="87" Width="430" Canvas.Left="11" Canvas.Top="521" HorizontalAlignment="Center" VerticalAlignment="Top" SelectionMode="Single">
+            <ListView x:Name="listAtts" Height="82" Width="431" Canvas.Left="10" Canvas.Top="424" HorizontalAlignment="Center" VerticalAlignment="Top" SelectionMode="Single" Background="White" BorderBrush="{x:Null}"/>
+            <ListView x:Name="listFilesNode" Height="87" Width="430" Canvas.Left="11" Canvas.Top="521" HorizontalAlignment="Center" VerticalAlignment="Top" SelectionMode="Single" Background="White">
             </ListView>
         </Canvas>
-        <Canvas x:Name="canvav" Grid.Column="4" Grid.ColumnSpan="2" Margin="472,90,33,220" Grid.RowSpan="2">
-            <Grid x:Name="grid3d" Height="567" Width="793" Grid.Column="3" Canvas.Top="-5" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Canvas x:Name="canvav" Grid.Column="4" Grid.ColumnSpan="2" Margin="472,90,33,220" Grid.RowSpan="2" Opacity="0">
+            <Grid x:Name="grid3d" Height="567" Width="793" Grid.Column="3" Canvas.Top="-5" HorizontalAlignment="Left" VerticalAlignment="Top" Opacity="0">
                 <edrawing:EDrawingWPFControl Name="edrawingControl"/>
                 <WebBrowser x:Name="wb" Margin="0,0,0,3"/>
+                <TextBox BorderBrush="{x:Null}" SelectionBrush="{x:Null}" Foreground="{x:Null}" Text="Selecciona un archivo para visualizar" Background="#FF0F4C82" FontSize="36" TextAlignment="Center" FontFamily="Consolas"/>
             </Grid>
         </Canvas>
-        <Image HorizontalAlignment="Left" Height="70" VerticalAlignment="Center" Width="90" Source="/image/logo1rb.png" Grid.Column="3" Grid.ColumnSpan="2" Margin="9,0,0,0"/>
-        <Image Grid.Column="4" HorizontalAlignment="Left" Height="70" Margin="45,0,0,0" VerticalAlignment="Center" Width="83" Source="/image/logoAb.png"/>
+        <Rectangle Grid.Column="3" HorizontalAlignment="Left" Height="70" Margin="9,0,0,0" VerticalAlignment="Top" Width="1359" Grid.ColumnSpan="3" Fill="#FFA7C7FF" Opacity="0.4"/>
+
+        <Image HorizontalAlignment="Left" Height="70" VerticalAlignment="Top" Width="90" Source="/image/logo1rb.png" Grid.Column="3" Grid.ColumnSpan="2" Margin="9,0,0,0"/>
+        <Button x:Name="HamburgerButton" Click="HamburgerButton_Click"
+                Margin="160,12,0,0" Width="40" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="5" Background="{x:Null}" BorderBrush="{x:Null}" Height="46" Foreground="{x:Null}">
+            <Image Source="/image/user.png" Height="50" Width="36" StretchDirection="DownOnly"/>
+        </Button>
+        <StackPanel x:Name="MenuItemsPanel"
+                    Visibility="Hidden" Margin="69,0,68,0" Grid.Column="5" Width="NaN" VerticalAlignment="Center" Height="70">
+            <Button Click="MenuClick" Content="Regresar" Background="White"/>
+            <Button Click="LogOut" Content="Cerrar sesión" Background="White"/>
+            <Button Click="ExitClick" Content="Salir" Background="White"/>
+        </StackPanel>
+        <Image Grid.Column="4" HorizontalAlignment="Left" Height="70" Margin="55,0,0,0" VerticalAlignment="Top" Width="83" Source="/image/logoAb.png"/>
     </Grid>
 </Window>
