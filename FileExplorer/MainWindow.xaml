@@ -10,7 +10,7 @@
         xmlns:edrawing="clr-namespace:DuEDrawingControl;assembly=DuEDrawingControl"
         x:Class="FileExplorer.MainWindow"
 		Closing="Window_Closing"
-		Title="EMPRESA" Width="1368" Height="768" WindowState="Maximized">
+		Title="Consulta " Width="1368" Height="768" WindowState="Maximized">
 
     <Grid Height="NaN" Margin="-1,0,1,-131" Width="NaN">
         <Grid.Background>
@@ -216,7 +216,7 @@
                 <TextBox BorderBrush="{x:Null}" SelectionBrush="{x:Null}" Foreground="{x:Null}" Text="Selecciona un archivo para visualizar" Background="#FF0F4C82" FontSize="36" TextAlignment="Center" FontFamily="Consolas"/>
             </Grid>
         </Canvas>
-        <Rectangle Grid.Column="3" HorizontalAlignment="Left" Height="70" Margin="9,0,0,0" VerticalAlignment="Top" Width="1359" Grid.ColumnSpan="3" Fill="#FFA7C7FF" Opacity="0.4"/>
+        <Rectangle Grid.Column="3" HorizontalAlignment="Left" Height="70" VerticalAlignment="Top" Width="1368" Grid.ColumnSpan="3" Fill="#FFA7C7FF" Opacity="0.4"/>
 
         <Image HorizontalAlignment="Left" Height="70" VerticalAlignment="Top" Width="90" Source="/image/logo1rb.png" Grid.Column="3" Grid.ColumnSpan="2" Margin="9,0,0,0"/>
         <Button x:Name="HamburgerButton" Click="HamburgerButton_Click"

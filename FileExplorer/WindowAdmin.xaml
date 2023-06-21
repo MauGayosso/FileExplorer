@@ -6,6 +6,8 @@
         xmlns:notifications="clr-namespace:Notifications.Wpf.Controls;assembly=Notifications.Wpf"
 		xmlns:local="clr-namespace:FileExplorer"
 		xmlns:prop="clr-namespace:FileExplorer.Properties"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns:h="http://helix-toolkit.org/wpf"
         x:Class="FileExplorer.WindowAdmin"
         mc:Ignorable="d"
         Title="Administrador" SizeToContent="WidthAndHeight" WindowState="Maximized" Width="1368" Height="768">
@@ -23,9 +25,9 @@
             <Button Click="ExitClick" Content="Salir" Background="White"/>
         </StackPanel>
         <Image HorizontalAlignment="Left" Height="70" Margin="114,0,0,0" VerticalAlignment="Top" Width="83" Source="/image/logoAb.png"/>
-        <TabControl Margin="0,70,10,0">
+        <TabControl Margin="0,70,3,0">
             <TabItem Header="Clientes">
-                <Grid Height="654" VerticalAlignment="Center" HorizontalAlignment="Right" Width="1352">
+                <Grid Height="654" VerticalAlignment="Top" HorizontalAlignment="Right" Width="1422" Margin="0,0,-8,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="533*"/>
                         <RowDefinition Height="121*"/>
@@ -34,12 +36,65 @@
                         <ImageBrush ImageSource="/image/bwall.jpg"/>
                     </Grid.Background>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="87*"/>
+                        <ColumnDefinition Width="72*"/>
+                        <ColumnDefinition Width="15*"/>
                         <ColumnDefinition Width="1265*"/>
                     </Grid.ColumnDefinitions>
-                    <DataGrid x:Name="dynamicTable" AutoGenerateColumns="False" Margin="10,10,1135,60" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                    <DataGrid x:Name="dynamicTable" AutoGenerateColumns="False" Margin="0,22,743,48" Grid.RowSpan="2" Grid.Column="2">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Nombre" Binding="{Binding Name}" />
+                            <DataGridTextColumn Header="Ubicacion" Binding="{Binding PathClient}" />
+                            <DataGridTemplateColumn Header="">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Editar" Command="{Binding EditCommand}" CommandParameter="{Binding}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Eliminar" Command="{Binding DeleteCommand}" CommandParameter="{Binding}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button x:Name="btnReload" Grid.Column="2" HorizontalAlignment="Left" Margin="467,24,0,0" VerticalAlignment="Top" Height="21" Width="25" BorderBrush="White" Click="btnReload_Click">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/image/refresh.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Canvas  x:Name="canvaCliente" Visibility="Hidden" Grid.Column="2" Margin="552,24,408,0" Background="White" Height="330" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+
+                        <TextBox x:Name="txtNameInsertClient" Canvas.Left="25" TextWrapping="Wrap" Canvas.Top="70" Width="160" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <Button x:Name="btnSelectFolderCliente" Content="Selecciona una carpeta" Canvas.Left="25" Canvas.Top="113" HorizontalAlignment="Center" VerticalAlignment="Top" Click="btnSelectFolderCliente_Click" RenderTransformOrigin="0.5,0.5"/>
+                        <Button Content="Agregar" Canvas.Left="129" Canvas.Top="188" Height="26" RenderTransformOrigin="0.5,0.5" Width="72" Click="Button_Click"/>
+                        <Label Content="Nombre del cliente" HorizontalAlignment="Center" Canvas.Left="25" Canvas.Top="39" VerticalAlignment="Center"/>
+                    </Canvas>
+                    <Label x:Name="lblFolderCliente" Grid.Column="2" HorizontalAlignment="Left" Margin="514,348,0,0" VerticalAlignment="Top" Height="38" Width="281"/>
+                    <Button x:Name="btnAddClient" Grid.Column="2" HorizontalAlignment="Left" Margin="497,23,0,0" VerticalAlignment="Top" Height="22" Width="22" BorderBrush="White" Foreground="{x:Null}" Click="btnAddClient_Click">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/image/add-user.png"/>
+                        </Button.Background>
+                    </Button>
+                </Grid>
+
+            </TabItem>
+            <TabItem Header="Usuarios">
+                <Grid Height="654" VerticalAlignment="Center" HorizontalAlignment="Left" Width="1361">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="17*"/>
+                        <ColumnDefinition Width="15*"/>
+                        <ColumnDefinition Width="1320*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.Background>
+                        <ImageBrush ImageSource="/image/bwall.jpg"/>
+                    </Grid.Background>
+                    <DataGrid x:Name="dynamicTableUsers" AutoGenerateColumns="False" Margin="10,10,1105,106" Grid.ColumnSpan="3">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Usuario" Binding="{Binding Name}" />
+                            <DataGridTextColumn Header="Contraseña" Binding="{Binding Password}" />
                             <DataGridTemplateColumn Header="Editar">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -56,35 +111,54 @@
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
+                    <ui:Button x:Name="btnReloadUsers" Grid.Column="2" HorizontalAlignment="Left" Margin="220,10,0,0" VerticalAlignment="Top" Click="btnReloadUsers_Click_1" Height="30" Width="35" Foreground="{x:Null}" BorderBrush="White">
+                        <ui:Button.Background>
+                            <ImageBrush ImageSource="/image/refresh.png"/>
+                        </ui:Button.Background>
+                    </ui:Button>
+                    <ui:Button x:Name="btnAddUsers" Grid.Column="2" HorizontalAlignment="Left" Margin="265,10,0,0" VerticalAlignment="Top" Height="30" Width="30" BorderBrush="#FFFDFDFD">
+                        <ui:Button.Background>
+                            <ImageBrush ImageSource="/image/add-user.png"/>
+                        </ui:Button.Background>
+                    </ui:Button>
                 </Grid>
-
             </TabItem>
-            <TabItem Header="Usuarios">
-                <Grid Background="#FFE5E5E5" Height="654" VerticalAlignment="Center" HorizontalAlignment="Right" Width="1352">
-                    <DataGrid x:Name="dynamicTableUsers" AutoGenerateColumns="False" Margin="0,0,1115,10">
+            <TabItem Header="Tips" Height="22" Margin="-1,0,0,0" VerticalAlignment="Center">
+                <Grid Height="654" VerticalAlignment="Center" HorizontalAlignment="Left" Width="1363">
+                    <Grid.Background>
+                        <ImageBrush ImageSource="/image/bwall.jpg"/>
+                    </Grid.Background>
+                    <DataGrid x:Name="dynamicTableTips" AutoGenerateColumns="False" Margin="10,10,423,221" SelectionChanged="dynamicTableTips_SelectionChanged">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Usuario" Binding="{Binding Name}" />
-                            <DataGridTextColumn Header="Usuario" Binding="{Binding Password}" />
-                            <DataGridTemplateColumn Header="Edit">
+                            <DataGridTextColumn Header="Mensaje" Binding="{Binding Message}" />
+                            <DataGridTextColumn Header="Categoria" Binding="{Binding Category}" />
+                            <DataGridTemplateColumn Header="">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="Edit" Command="{Binding EditCommand}" CommandParameter="{Binding}" />
+                                        <Button Content="Editar" Command="{Binding EditCommand}" CommandParameter="{Binding}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Delete">
+                            <DataGridTemplateColumn Header=" ">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="Delete" Command="{Binding DeleteCommand}" CommandParameter="{Binding}" />
+                                        <Button Content="Eliminar" Command="{Binding DeleteCommand}" CommandParameter="{Binding}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
+                    <Button Content="Button" HorizontalAlignment="Left" Margin="867,13,0,0" VerticalAlignment="Top" Foreground="{x:Null}" BorderBrush="{x:Null}" Height="20" Width="25" RenderTransformOrigin="0.5,0.5">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/image/refresh.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button Content="Button" HorizontalAlignment="Left" Margin="902,13,0,0" VerticalAlignment="Top" Height="20" Width="20" Foreground="{x:Null}" BorderBrush="{x:Null}">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/image/addTip.png"/>
+                        </Button.Background>
+                    </Button>
                 </Grid>
-            </TabItem>
-            <TabItem Header="Tips" Height="22" Margin="-1,0,0,0" VerticalAlignment="Center">
-                <Grid Background="#FFE5E5E5" Height="654" VerticalAlignment="Center" HorizontalAlignment="Left" Width="1352"/>
             </TabItem>
             <TabItem Header="Ayudas Visuales">
                 <Grid Background="#FFE5E5E5" Height="654" VerticalAlignment="Center" HorizontalAlignment="Right" Width="1352"/>

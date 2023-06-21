@@ -58,12 +58,19 @@ namespace FileExplorer
                 win.parseDir = "C:/Users/mauri/Documents/ING/"+comboBox1.Text+"/";
                 win.ParseNewDir();
                 win.Show();
-
+                Close();
             }
             else
             {
                 MessageBox.Show("Cliente no encontrado");
             }
+        }
+
+        private void btnBack_Click(object sender, RoutedEventArgs e)
+        {
+            WindowOptions win = new WindowOptions();
+            win.Show();
+            Close();
         }
     }
 }

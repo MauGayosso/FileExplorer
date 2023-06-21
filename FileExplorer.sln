@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileExplorer", "FileExplore
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DuEDrawingControl", "..\DuEDrawingControl\src\DuEDrawingControl\DuEDrawingControl.csproj", "{FA33602E-4FBC-4632-9433-59223C3EA2B2}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "gaia", "gaia\gaia.vdproj", "{D09E97D0-D0E5-4823-A4CF-453FC522C2C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,8 +23,8 @@ Global
 		{A0CF3E63-4C8E-41B7-997F-617DA21C1DFD}.Debug|x64.Build.0 = Debug|Any CPU
 		{A0CF3E63-4C8E-41B7-997F-617DA21C1DFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0CF3E63-4C8E-41B7-997F-617DA21C1DFD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A0CF3E63-4C8E-41B7-997F-617DA21C1DFD}.Release|x64.ActiveCfg = Debug|Any CPU
-		{A0CF3E63-4C8E-41B7-997F-617DA21C1DFD}.Release|x64.Build.0 = Debug|Any CPU
+		{A0CF3E63-4C8E-41B7-997F-617DA21C1DFD}.Release|x64.ActiveCfg = Release|Any CPU
+		{A0CF3E63-4C8E-41B7-997F-617DA21C1DFD}.Release|x64.Build.0 = Release|Any CPU
 		{FA33602E-4FBC-4632-9433-59223C3EA2B2}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{FA33602E-4FBC-4632-9433-59223C3EA2B2}.Debug|Any CPU.Build.0 = Debug|x64
 		{FA33602E-4FBC-4632-9433-59223C3EA2B2}.Debug|x64.ActiveCfg = Debug|x64
@@ -31,6 +33,10 @@ Global
 		{FA33602E-4FBC-4632-9433-59223C3EA2B2}.Release|Any CPU.Build.0 = Release|x64
 		{FA33602E-4FBC-4632-9433-59223C3EA2B2}.Release|x64.ActiveCfg = Release|x64
 		{FA33602E-4FBC-4632-9433-59223C3EA2B2}.Release|x64.Build.0 = Release|x64
+		{D09E97D0-D0E5-4823-A4CF-453FC522C2C8}.Debug|Any CPU.ActiveCfg = Debug
+		{D09E97D0-D0E5-4823-A4CF-453FC522C2C8}.Debug|x64.ActiveCfg = Debug
+		{D09E97D0-D0E5-4823-A4CF-453FC522C2C8}.Release|Any CPU.ActiveCfg = Release
+		{D09E97D0-D0E5-4823-A4CF-453FC522C2C8}.Release|x64.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

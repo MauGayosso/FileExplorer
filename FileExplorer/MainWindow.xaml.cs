@@ -18,6 +18,7 @@ using Exception = System.Exception;
 using Window = System.Windows.Window;
 using Brush = System.Windows.Media.Brush;
 using DuEDrawingControl;
+using System.ComponentModel.Design;
 
 namespace FileExplorer
 
@@ -112,7 +113,6 @@ namespace FileExplorer
             DataContext = this;
             Brush titleBarBrush = new SolidColorBrush(WindowGlassColor);
             eDrawingView = edrawingControl;
-
         }
 
         public void LoadPathFile()

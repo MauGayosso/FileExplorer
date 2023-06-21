@@ -7,7 +7,10 @@
         mc:Ignorable="d"
         Title="Ayudas Visuales" Height="308" Width="529" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" >
     <Grid Margin="1,0,-1,0">
-        <ComboBox x:Name="comboBox1" Canvas.Left="165" Canvas.Top="141" Width="168" Height="28">
+        <Grid.Background>
+            <ImageBrush ImageSource="/image/bwall.jpg"/>
+        </Grid.Background>
+        <ComboBox x:Name="comboBox1" Canvas.Left="165" Canvas.Top="141" Width="168" Height="28" Margin="180,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left">
             <ComboBox.Background>
                 <LinearGradientBrush EndPoint="0,1">
                     <GradientStop Color="#FFF0F0F0"/>
@@ -17,5 +20,13 @@
         </ComboBox>
         <Button Content="Entrar" HorizontalAlignment="Center" Margin="0,186,0,0" VerticalAlignment="Top" Width="41" Click="Button_Click"/>
         <StackPanel x:Name="notificationContainer" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+        <Label Content="Ayudas Visuales" HorizontalAlignment="Center" Margin="0,73,0,0" VerticalAlignment="Top" FontFamily="Bahnschrift" FontSize="22" Foreground="White"/>
+        <Image HorizontalAlignment="Left" Height="68" Margin="10,19,0,0" VerticalAlignment="Top" Width="80" Source="/image/logo1.png"/>
+        <Image HorizontalAlignment="Left" Height="81" Margin="438,10,0,0" VerticalAlignment="Top" Width="121" Source="/image/logoAb.png"/>
+        <Button x:Name="btnBack" Content="Button" HorizontalAlignment="Left" Margin="180,186,0,0" VerticalAlignment="Top" BorderBrush="{x:Null}" Foreground="{x:Null}" Click="btnBack_Click">
+            <Button.Background>
+                <ImageBrush ImageSource="/image/back.png"/>
+            </Button.Background>
+        </Button>
     </Grid>
 </Window>

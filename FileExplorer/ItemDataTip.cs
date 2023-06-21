@@ -7,10 +7,10 @@ using System.Windows.Input;
 
 namespace FileExplorer
 {
-    public class ItemData
+    public class ItemDataTip
     {
-        public string Name { get; set; }
-        public string PathClient { get; set; }
+        public string Message { get; set; }
+        public string Category { get; set; }
 
         public ICommand EditCommand { get; set; }
         public ICommand DeleteCommand { get; set; }

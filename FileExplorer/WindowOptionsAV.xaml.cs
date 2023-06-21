@@ -93,6 +93,11 @@ namespace FileExplorer
             ToastNotificationManagerCompat.CreateToastNotifier().Show(notification);
         }
 
-
+        private void btnBack_Click(object sender, RoutedEventArgs e)
+        {
+            WindowLogin win = new WindowLogin();
+            win.Show();
+            Close();
+        }
     }
 }

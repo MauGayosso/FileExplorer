@@ -5,21 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FileExplorer"
         mc:Ignorable="d"
-        Title="Clientes" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+        Title="Clientes" Height="385" Width="580" WindowStartupLocation="CenterScreen">
     <Grid>
-        <Canvas Background="#FFE4E4E4" Margin="151,76,151,76">
-            <ComboBox x:Name="comboBox1" Canvas.Left="165" Canvas.Top="141" Width="168" SelectionChanged="comboBox1_SelectionChanged" Height="28">
-                <ComboBox.Background>
-                    <LinearGradientBrush EndPoint="0,1">
-                        <GradientStop Color="#FFF0F0F0"/>
-                        <GradientStop Color="White" Offset="1"/>
-                    </LinearGradientBrush>
-                </ComboBox.Background>
-                <ComboBoxItem Tag="Cliente 1">Cliente 1</ComboBoxItem>
-                <ComboBoxItem Tag="Cliente 2">Cliente 2</ComboBoxItem>
-            </ComboBox>
-            <Button x:Name="btnEntrar" Content="Entrar" Canvas.Left="218" Canvas.Top="208" HorizontalAlignment="Left" VerticalAlignment="Top" Width="62" Click="btnEntrar_Click"/>
-        </Canvas>
+        <Grid.Background>
+            <ImageBrush ImageSource="/image/bwall.jpg"/>
+        </Grid.Background>
+
+        <ComboBox x:Name="comboBox1" Canvas.Left="55" Canvas.Top="109" Width="168" SelectionChanged="comboBox1_SelectionChanged" Height="28" Margin="206,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left">
+            <ComboBox.Background>
+                <LinearGradientBrush EndPoint="0,1">
+                    <GradientStop Color="#FFF0F0F0"/>
+                    <GradientStop Color="White" Offset="1"/>
+                </LinearGradientBrush>
+            </ComboBox.Background>
+            <ComboBoxItem Tag="Cliente 1">Cliente 1</ComboBoxItem>
+            <ComboBoxItem Tag="Cliente 2">Cliente 2</ComboBoxItem>
+        </ComboBox>
+        <Button x:Name="btnEntrar" Content="Entrar" Canvas.Left="218" Canvas.Top="208" HorizontalAlignment="Center" VerticalAlignment="Top" Width="50" Click="btnEntrar_Click" Margin="0,224,0,0"/>
+        <Button x:Name="btnBack" Content="Button" HorizontalAlignment="Left" Margin="206,224,0,0" VerticalAlignment="Top" BorderBrush="{x:Null}" Foreground="{x:Null}" Click="btnBack_Click">
+            <Button.Background>
+                <ImageBrush ImageSource="/image/back.png"/>
+            </Button.Background>
+        </Button>
+        <Image HorizontalAlignment="Left" Height="84" Margin="10,10,0,0" VerticalAlignment="Top" Width="95" Source="/image/logo1.png"/>
+        <Image HorizontalAlignment="Left" Height="89" Margin="481,0,0,0" VerticalAlignment="Top" Width="105" Source="/image/logoAb.png"/>
+        <Label Content="Clientes" HorizontalAlignment="Center" Margin="0,114,0,0" VerticalAlignment="Top" FontFamily="Bahnschrift" FontSize="22" Foreground="White"/>
 
     </Grid>
 </Window>

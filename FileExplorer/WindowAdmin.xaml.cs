@@ -1,8 +1,11 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Office.Word;
+using OxyPlot.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.OleDb;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,11 +13,15 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Windows.UI.Xaml.Controls.Primitives;
 using Wpf.Ui.Common;
+using MessageBox = System.Windows.MessageBox;
+using Path = System.IO.Path;
 
 namespace FileExplorer
 {
@@ -25,29 +32,54 @@ namespace FileExplorer
     {
         public ObservableCollection<ItemData> Items { get; set; }
         public ObservableCollection<ItemDataUsers> ItemsUsers { get; set; }
+        public ObservableCollection<ItemDataTip> ItemTips { get; set; }
 
         string connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:/Users/mauri/source/repos/f//FileExplorer/attFiles.accdb;";
-        List<string> clients = new List<string>();
+        Dictionary<string, string> clients = new Dictionary<string, string>();
         Dictionary<string, string> usuarios = new Dictionary<string, string>();
+        Dictionary<string, string> tips = new Dictionary<string, string>();
 
         public WindowAdmin()
         {
             InitializeComponent();
             Items = new ObservableCollection<ItemData>();
             ItemsUsers = new ObservableCollection<ItemDataUsers>();
+            ItemTips = new ObservableCollection<ItemDataTip>();
+            // Load data
             addItemsClientes();
             addItemUsers();
-            foreach (var clien in clients)
-            {
-                Items.Add(new ItemData { Name = clien, EditCommand = new RelayCommand(EditItem), DeleteCommand = new RelayCommand(DeleteItem) });
-            }
+            addItemsTips();
+            // Load Grid with info
+            addToGridUsers();
+            addToGridClient();
+            addToGridTips();
+        }
 
+        private void addToGridTips()
+        {
+            foreach (var tip in tips)
+            {
+                Debug.WriteLine(tip);
+                ItemTips.Add(new ItemDataTip { Message = tip.Key, Category = tip.Value, EditCommand = new RelayCommand(EditItemTip), DeleteCommand = new RelayCommand(DeleteItemTip) });
+            }
+            dynamicTableTips.ItemsSource = ItemTips;
+        }
+        private void addToGridUsers()
+        {
             foreach (var user in usuarios)
             {
-                ItemsUsers.Add(new ItemDataUsers { Name = user.Key, Password = user.Value, EditCommand = new RelayCommand(EditItem), DeleteCommand = new RelayCommand(DeleteItem) });
+                ItemsUsers.Add(new ItemDataUsers { Name = user.Key, Password = user.Value, EditCommand = new RelayCommand(EditItemTip), DeleteCommand = new RelayCommand(DeleteItemUsers) });
+            }
+
+            dynamicTableUsers.ItemsSource = ItemsUsers;
+        }
+        private void addToGridClient()
+        {
+            foreach (var clien in clients)
+            {
+                Items.Add(new ItemData { Name = clien.Key, PathClient = clien.Value, EditCommand = new RelayCommand(EditItem), DeleteCommand = new RelayCommand(DeleteItem) });
             }
             dynamicTable.ItemsSource = Items;
-            dynamicTableUsers.ItemsSource = ItemsUsers;
         }
         private void addItemsClientes()
         {
@@ -61,8 +93,7 @@ namespace FileExplorer
                 OleDbDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    Debug.WriteLine(reader.GetValue(0));
-                    clients.Add(reader.GetValue(0).ToString());
+                    clients.Add(reader.GetValue(0).ToString(), reader.GetValue(1).ToString());
                 }
                 reader.Close();
                 connection.Close();
@@ -81,7 +112,6 @@ namespace FileExplorer
                 OleDbDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    Debug.WriteLine(reader.GetValue(0));
                     usuarios.Add(reader.GetValue(0).ToString(), reader.GetValue(1).ToString());
                 }
                 reader.Close();
@@ -89,6 +119,24 @@ namespace FileExplorer
             }
         }
 
+        private void addItemsTips()
+        {
+            var query = "SELECT * FROM messages";
+            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            {
+                connection.Open();
+                OleDbCommand command = new OleDbCommand(query, connection);
+                command.ExecuteNonQuery();
+
+                OleDbDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    tips.Add(reader.GetValue(0).ToString(), reader.GetValue(1).ToString());
+                }
+                reader.Close();
+                connection.Close();
+            }
+        }
 
 
         private void EditItem(object item)
@@ -122,12 +170,81 @@ namespace FileExplorer
 
         }
 
+        // EDIT BUTTON TIP 
+        private void EditItemTip()
+        {
+
+        }
+
+        //EDIT BUTTON USER
+
+        private void EditItemUser()
+        {
+
+        }
+
+        // DELETE BUTTON TO CLIENTS
         private void DeleteItem(object item)
         {
             // Handle delete command here
             ItemData selectedItem = (ItemData)item;
-            MessageBox.Show("Delete " + selectedItem.Name);
-            Items.Remove(selectedItem);
+            MessageBoxResult result = MessageBox.Show("¿Estas seguro de eliminar el cliente : " + selectedItem.Name + "?", "Eliminar", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.OK)
+            {
+                string query = "DELETE FROM clientes WHERE id_usuario = ?";
+
+                using (OleDbConnection connection = new OleDbConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@id_usuario", selectedItem.Name);
+                        int rows = command.ExecuteNonQuery();
+                    }
+                }
+                clients.Clear();
+                Items.Clear();
+                dynamicTable.ItemsSource = null;
+                addItemsClientes();
+                addToGridClient();
+            }
+        }
+
+
+        // DELETE BUTTON TO USERS
+        private void DeleteItemUsers(object itemUsers)
+        {
+            // Handle delete command here
+            ItemDataUsers selectedItem = (ItemDataUsers)itemUsers;
+            MessageBoxResult result = MessageBox.Show("¿Estas seguro de eliminar el cliente : " + selectedItem.Name + "?", "Eliminar", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.OK)
+            {
+                string query = "DELETE FROM usuarios WHERE id_usuario = ?";
+
+                using (OleDbConnection connection = new OleDbConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@id_usuario", selectedItem.Name);
+                        int rows = command.ExecuteNonQuery();
+                    }
+                }
+                usuarios.Clear();
+                ItemsUsers.Clear();
+                dynamicTableUsers.ItemsSource = null;
+                addItemUsers();
+                addToGridUsers();
+            }
+        }
+
+        // DELETE BUTTON TO TIPS
+
+        private void DeleteItemTip()
+        {
+
         }
 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
@@ -155,6 +272,97 @@ namespace FileExplorer
         }
 
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        //BUTTON RELOAD CLIENTS PAGE
+        private void btnReload_Click(object sender, RoutedEventArgs e)
+        {
+            clients.Clear();
+            Items.Clear();
+            dynamicTable.ItemsSource = null;
+            addItemsClientes();
+            addToGridClient();
+        }
+
+        //BUTTON RELOAD USERS PAGE
+        private void btnReloadUsers_Click_1(object sender, RoutedEventArgs e)
+        {
+            usuarios.Clear();
+            ItemsUsers.Clear();
+            dynamicTableUsers.ItemsSource = null;
+            addItemUsers();
+            addToGridUsers();
+        }
+
+        private void btnSelectFolderCliente_Click(object sender, RoutedEventArgs e)
+        {
+            using (FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog())
+            {
+                DialogResult result = folderBrowserDialog.ShowDialog();
+
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    // Get the selected folder path from the dialog
+                    string folderPath = folderBrowserDialog.SelectedPath;
+                    lblFolderCliente.Content = folderPath;
+                }
+
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (lblFolderCliente.Content == null)
+            {
+                MessageBox.Show("Selecciona una carpeta", "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+            else if (txtNameInsertClient.Text == null)
+            {
+                MessageBox.Show("Nombre faltante", "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+            else
+            {
+                var query = "insert into clientes (id_usuario,path_cliente) values (@id_usuario,@path_cliente)";
+
+                using (OleDbConnection connection = new OleDbConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@id_usuario", txtNameInsertClient.Text);
+                        command.Parameters.AddWithValue("@path_cliente", lblFolderCliente.Content);
+                        command.ExecuteNonQuery();
+                    }
+                }
+                clients.Clear();
+                Items.Clear();
+                dynamicTable.ItemsSource = null;
+                addItemsClientes();
+                addToGridClient();
+            }
+
+        }
+
+        private void btnAddClient_Click(object sender, RoutedEventArgs e)
+        {
+            if (canvaCliente.Visibility == Visibility.Hidden)
+            {
+                btnAddClient.BorderBrush = Brushes.Red;
+                btnAddClient.BorderThickness = new Thickness(2);
+                canvaCliente.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                btnAddClient.BorderBrush = Brushes.Green;
+                btnAddClient.BorderThickness = new Thickness(2);
+                canvaCliente.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void dynamicTableTips_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
